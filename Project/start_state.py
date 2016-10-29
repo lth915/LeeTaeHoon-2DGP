@@ -9,7 +9,9 @@ logo_time = 0.0
 
 def enter():
     global image
-    open_canvas()
+    open_canvas(1200, 800)
+    #800, 600
+    #400, 300
     image = load_image('resource/start.png')
     pass
 

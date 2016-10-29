@@ -9,10 +9,10 @@ name = "MainState"
 
 class BackGround:
     def __init__(self):
-        self.image = load_image('resource/background.png')
+        self.image = load_image('resource/BackGround_Ingame.png')
 
     def draw(self):
-        self.image.draw(400, 300)
+        self.image.draw(600, 400)
 
 
 class Enemy1:
