@@ -10,9 +10,7 @@ logo_time = 0.0
 def enter():
     global image
     open_canvas(1200, 800)
-    #800, 600
-    #400, 300
-    image = load_image('resource/start.png')
+    image = load_image('resource/BackGround_Start.png')
     pass
 
 
@@ -26,7 +24,7 @@ def exit():
 def update():
     global logo_time
 
-    if(logo_time > 1.0):
+    if(logo_time > 2.0):
         logo_time = 0
         #game_framework.quit()
         game_framework.push_state(main_state)
@@ -38,7 +36,7 @@ def update():
 def draw():
     global image
     clear_canvas()
-    image.draw(400, 300)
+    image.draw(600, 400)
     update_canvas()
     pass
 

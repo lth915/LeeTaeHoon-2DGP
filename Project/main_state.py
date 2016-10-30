@@ -14,36 +14,42 @@ class BackGround:
 
 
 class MenuBtn:
-    MOUSEON = None
     def __init__(self):
         self.Start = load_image('resource/Btn_Main_Start.png')
         self.Help = load_image('resource/Btn_Main_Help.png')
         self.Option = load_image('resource/Btn_Main_Option.png')
         self.Exit = load_image('resource/Btn_Main_Exit.png')
         self.Selected = load_image('resource/Btn_Main_Selected.png')
+        self.width, self.height = 350, 75
 
     def drawStart(self):
         self.Start.draw(600, 400)
     def drawHelp(self):
-        self.Start.draw(600, 300)
+        self.Help.draw(600, 300)
     def drawOption(self):
-        self.Start.draw(600, 200)
+        self.Option.draw(600, 200)
     def drawExit(self):
-        self.Start.draw(600, 100)
+        self.Exit.draw(600, 100)
 
-    handle_Btn = [drawStart, drawHelp, drawOption, drawExit]
+
+class BtnSelected:
+    def __init__(self):
+        self.x, self.y = 600, -100
+        self.image = load_image('resource/Btn_Main_Selected.png')
+
     def draw(self):
-
+        self.image.draw(self.x, self.y)
 
 
 def enter():
-    global sx
-    global background
-    global Button
+    global BG
+    global Btn, Selected
+    global mx, my
 
-    background = BackGround()
-    sx = 200
-    Button = load_image('resource/Button_Main.png')
+    BG = BackGround()
+    Btn = MenuBtn()
+    Selected = BtnSelected()
+    mx, my = None, None
     pass
 
 
@@ -52,8 +58,7 @@ def exit():
 
 
 def handle_events():
-    global sx
-    global mx, my
+    global mx, my, Btn, Selected
 
     events = get_events()
     for event in events:
@@ -63,22 +68,38 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_MOUSEMOTION:
             mx, my = event.x, 799 - event.y
-        #elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
-            #if (sx >= 133) & (sx <= 598):
-                #sx += 133
-
+            if (mx > 600 - Btn.width / 2) & (mx < 600 + Btn.width / 2) & (my > 400 - Btn.height / 2) & (my < 400 + Btn.height / 2):
+                Selected.y = 400
+            elif (mx > 600 - Btn.width / 2) & (mx < 600 + Btn.width / 2) & (my > 300 - Btn.height / 2) & (my < 300 + Btn.height / 2):
+                Selected.y = 300
+            elif (mx > 600 - Btn.width / 2) & (mx < 600 + Btn.width / 2) & (my > 200 - Btn.height / 2) & (my < 200 + Btn.height / 2):
+                Selected.y = 200
+            elif (mx > 600 - Btn.width / 2) & (mx < 600 + Btn.width / 2) & (my > 100 - Btn.height / 2) & (my < 100 + Btn.height / 2):
+                Selected.y = 100
+            else:
+                Selected.y = -100
+        elif event.type == SDL_MOUSEBUTTONDOWN:
+            if Selected.y == 400:
+                game_framework.push_state(game_state)
+            if Selected.y == 300:
+                game_framework.push_state(help_state)
+            if Selected.y == 200:
+                game_framework.push_state(option_state)
+            if Selected.y == 100:
+                game_framework.quit()
     pass
 
 
 def draw():
-    global sx, background
+    global BG, Btn, Selected
 
     clear_canvas()
-    background.draw()
-    Button.clip_draw(0, 75 * 4, 350, 75, 600, 400)
-    Button.clip_draw(0, 75 * 3, 350, 75, 600, 300)
-    Button.clip_draw(0, 75 * 2, 350, 75, 600, 200)
-    Button.clip_draw(0, 75 * 1, 350, 75, 600, 100)
+    BG.draw()
+    Selected.draw()
+    Btn.drawStart()
+    Btn.drawHelp()
+    Btn.drawOption()
+    Btn.drawExit()
     update_canvas()
     pass
 
