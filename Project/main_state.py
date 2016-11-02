@@ -9,8 +9,8 @@ name = "MainState"
 class BackGround:
     def __init__(self):
         self.image = load_image('resource/BackGround_Main.png')
-        self.bgm = load_music('resource/Music_Main.mp3')
-        self.bgm.set_volume(50)
+        #self.bgm = load_music('resource/Music_Main.mp3')
+        #self.bgm.set_volume(50)
 
     def draw(self):
         self.image.draw(600, 400)
@@ -113,7 +113,7 @@ def draw():
 def update():
     global BG
 
-    BG.music()
+    #BG.music()
     pass
 
 

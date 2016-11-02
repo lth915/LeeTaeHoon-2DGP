@@ -14,6 +14,22 @@ class BackGround:
     def draw(self):
         self.image.draw(600, 400)
 
+class Icon:
+    def __init__(self):
+        self.Tower1 = load_image('resource/Icon_LaserTower.png')
+        self.Tower2 = load_image('resource/Icon_MissileTower.png')
+        self.Tower3 = load_image('resource/Icon_RadarTower.png')
+        self.Tower4 = load_image('resource/Icon_AntiTower.png')
+
+    def drawTower1(self):
+        self.Tower1.draw(1050, 750)
+    def drawTower2(self):
+        self.Tower2.draw(1150, 750)
+    def drawTower3(self):
+        self.Tower3.draw(1050, 650)
+    def drawTower4(self):
+        self.Tower4.draw(1150, 650)
+
 
 class Enemy1:
     image = None
@@ -59,9 +75,11 @@ def enter():
     global sx, frame
     global enemy, enemies
     global gbtselect
+    global icon
     sx = 325
     background = BackGround()
     enemy = Enemy1()
+    icon = Icon()
     wave = False
     gbtselect = load_image('resource/gbtselect.png')
     pass
@@ -82,17 +100,6 @@ def handle_events():
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             game_framework.quit()
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
-            if sx == 325:
-                sx += 150
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
-            if sx == 475:
-                sx -= 150
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-            if sx == 325:
-                enemy.speed = 1
-            elif sx == 475:
-                enemy.speed = 0
     pass
 
 
@@ -104,6 +111,10 @@ def update():
 def draw():
     clear_canvas()
     background.draw()
+    icon.drawTower1()
+    icon.drawTower2()
+    icon.drawTower3()
+    icon.drawTower4()
     enemy.draw()
     gbtselect.draw(sx, 75)
     update_canvas()
