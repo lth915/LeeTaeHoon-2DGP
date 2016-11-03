@@ -36,6 +36,7 @@ class Enemy1:
 
     def __init__(self):
         self.x, self.y = -50, 425
+        self.r = 25
         self.speed = 0
         self.frame = 1
         if Enemy1.image == None:
@@ -64,6 +65,9 @@ class Enemy1:
             self.frame = 1
             self.x += self.speed
         pass
+
+    def size(self):
+        return (self.x - self.r), (self.y - self.r), (self.x + self.r), (self.y + self.r)
 
     def draw(self):
         self.image.clip_draw(self.frame * 60, 0, 60, 60, self.x, self.y)
