@@ -3,6 +3,7 @@ from pico2d import *
 import math
 import random
 
+import game_state
 
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.size()
@@ -14,14 +15,3 @@ def collide(a, b):
     if bottom_a >= top_b: return False
 
     return True
-
-
-def buy(wallet, cost):
-    if (wallet >= cost):
-        wallet -= cost
-        return True
-    else:
-        return False
-
-def create_wave():
-    pass

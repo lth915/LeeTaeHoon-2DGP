@@ -2,7 +2,7 @@ import game_framework
 from pico2d import *
 import math
 import random
-import main_state
+import main_state, function_library
 
 name = "MainState"
 
@@ -30,73 +30,64 @@ class Icon:
     def drawTower4(self):
         self.Tower4.draw(1150, 650)
 
+class Tower:
+    image = None
+    def __init__(self):
+        self.x, self.y, self.r = 175, 525, 25
+        self.range, self.dmg, self.type = 100, 20, 1
+        self.target = None
+        if self.image == None:
+            self.image = load_image('resource/Tower_Laser.png')
 
-class Enemy1:
+    def size(self):
+        return (self.x - self.r - self.range), (self.y - self.r - self.range), \
+               (self.x + self.r + self.range), (self.y + self.r + self.range)
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+
+class Enemy:
     image = None
 
     def __init__(self):
-        self.x, self.y = -50, 425
-        self.r = 25
-        self.speed = 0
-        self.frame = 1
-        if Enemy1.image == None:
-            self.image = load_image('resource/enemy1.png')
+        self.x, self.y, self.r = 50, 375, 25
+        self.hp, self.speed, self.type, self.reward = 100, 5, 1, 10
+        self.frame, self.dir = 0, 2
+        if Enemy.image == None:
+            self.image = load_image('resource/Enemy Sprite.png')
 
     def update(self):
-        if (self.x < 225) & (self.y == 425):
-            self.frame = 1
-            self.x += self.speed
-        elif (self.x == 225) & (self.y <= 425) & (self.y > 225):
-            self.frame = 2
-            self.y -= self.speed
-        elif (self.x >= 225) & (self.x < 425) & (self.y == 225):
-            self.frame = 1
-            self.x += self.speed
-        elif (self.x == 425) & (self.y >= 225) & (self.y < 475):
-            self.frame = 0
-            self.y += self.speed
-        elif (self.x >= 425) & (self.x < 575) & (self.y == 475):
-            self.frame = 1
-            self.x += self.speed
-        elif (self.x == 575) & (self.y <= 475) & (self.y > 325):
-            self.frame = 2
-            self.y -= self.speed
-        elif (self.x >= 575) & (self.x <= 850) & (self.y == 325):
-            self.frame = 1
-            self.x += self.speed
-        pass
+        if wave == True:
+            self.frame = (self.frame + 1) % 9
+            if (self.x < 1000) & (self.y == 375):
+                self.dir = 2
+                self.x += self.speed
 
     def size(self):
         return (self.x - self.r), (self.y - self.r), (self.x + self.r), (self.y + self.r)
 
     def draw(self):
-        self.image.clip_draw(self.frame * 60, 0, 60, 60, self.x, self.y)
+        self.image.clip_draw(self.frame * 50, self.dir*50, 50, 50, self.x, self.y)
 
 
 def enter():
-    global background
+    global background, icon, enemy, enemies, tower
     global wave
-    global sx, frame
-    global enemy, enemies
-    global gbtselect
-    global icon
-    sx = 325
     background = BackGround()
-    enemy = Enemy1()
+    enemy = Enemy()
+    tower = Tower()
     icon = Icon()
     wave = False
-    gbtselect = load_image('resource/gbtselect.png')
     pass
 
 
 def exit():
-    global background
-    del(background)
     pass
 
 
 def handle_events():
-    global sx, wave, enemy
+    global wave
 
     events = get_events()
     for event in events:
@@ -104,12 +95,18 @@ def handle_events():
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             game_framework.quit()
-    pass
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
+            if wave == False:
+                wave = True
+            else:
+                wave = False
 
 
 def update():
+    global wave
+
     enemy.update()
-    pass
+    delay(0.05)
 
 
 def draw():
@@ -120,7 +117,7 @@ def draw():
     icon.drawTower3()
     icon.drawTower4()
     enemy.draw()
-    gbtselect.draw(sx, 75)
+    tower.draw()
     update_canvas()
     pass
 

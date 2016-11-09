@@ -9,14 +9,17 @@ name = "MainState"
 class BackGround:
     def __init__(self):
         self.image = load_image('resource/BackGround_Main.png')
-        #self.bgm = load_music('resource/Music_Main.mp3')
-        #self.bgm.set_volume(50)
+        self.bgm = load_music('resource/Music_Main.mp3')
+        self.bgm.set_volume(50)
 
     def draw(self):
         self.image.draw(600, 400)
 
     def music(self):
         self.bgm.repeat_play()
+
+    def music_off(self):
+        self.bgm.stop()
 
 
 class MenuBtn:
@@ -56,6 +59,7 @@ def enter():
     Btn = MenuBtn()
     Selected = BtnSelected()
     mx, my = None, None
+    BG.music()
     pass
 
 
@@ -86,12 +90,16 @@ def handle_events():
                 Selected.y = -100
         elif event.type == SDL_MOUSEBUTTONDOWN:
             if Selected.y == 400:
+                BG.music_off()
                 game_framework.push_state(game_state)
             if Selected.y == 300:
+                BG.music_off()
                 game_framework.push_state(help_state)
             if Selected.y == 200:
+                BG.music_off()
                 game_framework.push_state(option_state)
             if Selected.y == 100:
+                BG.music_off()
                 game_framework.quit()
     pass
 
@@ -111,9 +119,6 @@ def draw():
 
 
 def update():
-    global BG
-
-    #BG.music()
     pass
 
 
