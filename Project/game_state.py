@@ -2,9 +2,10 @@ import game_framework
 from pico2d import *
 import math
 import random
-import main_state, function_library
+import main_state
 
-from function_library import collide
+from function_library import *
+from icons import *
 
 name = "MainState"
 
@@ -22,24 +23,16 @@ class BackGround:
 
     def music_off(self):
         self.bgm.stop()
-
-class Icon:
-    def __init__(self):
-        self.Tower1 = load_image('resource/Icon_LaserTower.png')
-        self.Tower2 = load_image('resource/Icon_MissileTower.png')
-        self.Tower3 = load_image('resource/Icon_RadarTower.png')
-
-    def drawTower1(self):
-        self.Tower1.draw(1049, 489)
-    def drawTower2(self):
-        self.Tower2.draw(1099, 489)
-    def drawTower3(self):
-        self.Tower3.draw(1149, 489)
+    pass
 
 class Player:
     def __init__(self):
         self.mx, self.my = 0 ,0
         self.life, self.credit, self.mode = 20, 0, 0
+
+    def size(self):
+        return self.mx, self.my, self.mx, self.my
+    pass
 
 class Tower:
     image = None
@@ -56,13 +49,14 @@ class Tower:
 
     def draw(self):
         self.image.draw(self.x, self.y)
+    pass
 
 
 class Enemy:
     image = None
 
     def __init__(self):
-        self.x, self.y, self.r = 50, 375, 25
+        self.x, self.y, self.r = -50, 375, 25
         self.hp, self.speed, self.type, self.reward = 10000, 0.2, 1, 10
         self.frame, self.dir = 0, 2
         if Enemy.image == None:
@@ -81,23 +75,32 @@ class Enemy:
     def draw(self):
         self.image.clip_draw(self.frame * 50, self.dir*50, 50, 50, self.x, self.y)
         font.draw(self.x - 30, self.y + 25, "[HP:%d]" % self.hp, (255, 0, 0))
+    pass
 
 
 def enter():
-    global background, icon, enemy, enemies, tower, font
+    global background, player, enemy, enemies, tower, font
+    global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, exit
+    global Towersltd, Tssltd, Speedsltd, Setsltd
     global wave
     global start
-    background, tower, icon = BackGround(), Tower(), Icon()
+
+    tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, exit = Tower_Laser(), Tower_Missile(), Tower_Radar()\
+        , Tower_Upgrade(), Tower_Sell(), Speed_Run(), Speed_Stop(), Speed_Accelerate(), Option(), Exit()
+
+    Towersltd, Tssltd, Speedsltd, Setsltd = Tower_Selected(), Tsmall_Selected(), Speed_Selected(), Set_Selected()
+
+
+    background, tower= BackGround(), Tower()
+    player = Player()
     enemy, enemies = Enemy(), [Enemy() for i in range(20)]
     font = load_font('Fonts/Myriad.otf')
     wave = False
     start = 50
-
     background.music()
     for i in range(20):
         enemies[i].x -= start
         start += 75
-
 
     pass
 
@@ -107,7 +110,7 @@ def exit():
 
 
 def handle_events():
-    global wave
+    global wave, player, icon
 
     events = get_events()
     for event in events:
@@ -115,6 +118,34 @@ def handle_events():
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             game_framework.quit()
+
+        elif event.type == SDL_MOUSEMOTION:
+            player.mx, player.my = event.x, 799 - event.y
+
+            if collide(player, tower1): Towersltd.x = tower1.x
+            elif collide(player, tower2): Towersltd.x = tower2.x
+            elif collide(player, tower3): Towersltd.x = tower3.x
+            else: Towersltd.x = 1400
+
+            if collide(player, upgrade): Tssltd.y = upgrade.y
+            elif collide(player, sell): Tssltd.y = sell.y
+            else: Tssltd.y = 900
+
+            if collide(player, run): Speedsltd.x = run.x
+            elif collide(player, accel): Speedsltd.x = accel.x
+            elif collide(player, stop): Speedsltd.x = stop.x
+            else: Speedsltd.x = 1400
+
+            if collide(player, option): Setsltd.x = option.x
+            elif collide(player, exit): Setsltd.x = exit.x
+            else: Setsltd.x = 1400
+
+        elif event.type == SDL_MOUSEBUTTONDOWN:
+
+            if collide(player, run): wave = True
+            elif collide(player, stop): wave = False
+            elif collide(player, exit): game_framework.push_state(main_state)
+
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
             if wave == False:
                 wave = True
@@ -136,9 +167,24 @@ def update():
 def draw():
     clear_canvas()
     background.draw()
-    icon.drawTower1()
-    icon.drawTower2()
-    icon.drawTower3()
+
+    Speedsltd.draw()
+
+    tower1.draw()
+    tower2.draw()
+    tower3.draw()
+    upgrade.draw()
+    sell.draw()
+    run.draw()
+    accel.draw()
+    stop.draw()
+    option.draw()
+    exit.draw()
+
+    Towersltd.draw()
+    Tssltd.draw()
+    Setsltd.draw()
+
     for enemy in enemies:
         enemy.draw()
     tower.draw()
