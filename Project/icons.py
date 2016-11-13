@@ -233,7 +233,7 @@ class Option:
     pass
 
 
-class Exit:
+class Quit:
     image = None
 
     def __init__(self):

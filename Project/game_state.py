@@ -28,10 +28,16 @@ class BackGround:
 class Player:
     def __init__(self):
         self.mx, self.my = 0 ,0
-        self.life, self.credit, self.mode = 20, 0, 0
+        self.stage = 1
+        self.life, self.credit, self.mode = 20, 300, 0
 
     def size(self):
         return self.mx, self.my, self.mx, self.my
+
+    def draw(self):
+        font.draw(1066, 799 - 38, "STAGE %d" % self.stage, (255, 255, 255))
+        font.draw(1030, 799 - 63, "CREDIT |  %d" % self.credit, (255, 255, 255))
+        font.draw(1030, 799 - 88, "LIFE        |  %d" % self.life, (255, 255, 255))
     pass
 
 class Tower:
@@ -39,6 +45,7 @@ class Tower:
     def __init__(self):
         self.x, self.y, self.r = 175, 525, 25
         self.range, self.dmg, self.type = 150, 1, 1
+        self.credit = 100
         self.target = None
         if self.image == None:
             self.image = load_image('resource/Tower_Laser.png')
@@ -80,13 +87,13 @@ class Enemy:
 
 def enter():
     global background, player, enemy, enemies, tower, font
-    global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, exit
+    global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
     global Towersltd, Tssltd, Speedsltd, Setsltd
     global wave
     global start
 
-    tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, exit = Tower_Laser(), Tower_Missile(), Tower_Radar()\
-        , Tower_Upgrade(), Tower_Sell(), Speed_Run(), Speed_Stop(), Speed_Accelerate(), Option(), Exit()
+    tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit = Tower_Laser(), Tower_Missile(), Tower_Radar()\
+        , Tower_Upgrade(), Tower_Sell(), Speed_Run(), Speed_Stop(), Speed_Accelerate(), Option(), Quit()
 
     Towersltd, Tssltd, Speedsltd, Setsltd = Tower_Selected(), Tsmall_Selected(), Speed_Selected(), Set_Selected()
 
@@ -97,7 +104,9 @@ def enter():
     font = load_font('Fonts/Myriad.otf')
     wave = False
     start = 50
+
     background.music()
+
     for i in range(20):
         enemies[i].x -= start
         start += 75
@@ -116,6 +125,7 @@ def handle_events():
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
+
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             game_framework.quit()
 
@@ -137,20 +147,23 @@ def handle_events():
             else: Speedsltd.x = 1400
 
             if collide(player, option): Setsltd.x = option.x
-            elif collide(player, exit): Setsltd.x = exit.x
+            elif collide(player, quit): Setsltd.x = quit.x
             else: Setsltd.x = 1400
 
         elif event.type == SDL_MOUSEBUTTONDOWN:
-
             if collide(player, run): wave = True
             elif collide(player, stop): wave = False
-            elif collide(player, exit): game_framework.push_state(main_state)
+            elif collide(player, quit): game_framework.push_state(main_state)
 
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-            if wave == False:
-                wave = True
-            else:
-                wave = False
+            if collide(player, tower1):
+                if player.credit >= tower.credit:
+                    player.mode = 1
+                    player.credit -= tower.credit
+            elif collide(player, tower2):
+                player.mode = 1
+            elif collide(player, tower3):
+                player.mode = 1
+    pass
 
 
 def update():
@@ -162,11 +175,13 @@ def update():
         if enemy.hp <= 0:
             enemies.remove(enemy)
         enemy.update()
+    pass
 
 
 def draw():
     clear_canvas()
     background.draw()
+    player.draw()
 
     Speedsltd.draw()
 
@@ -179,7 +194,7 @@ def draw():
     accel.draw()
     stop.draw()
     option.draw()
-    exit.draw()
+    quit.draw()
 
     Towersltd.draw()
     Tssltd.draw()
