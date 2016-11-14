@@ -14,11 +14,13 @@ class BackGround:
     def __init__(self):
         self.image = load_image('resource/BackGround_Ingame2.png')
         self.bgm = load_music('Sounds/Background_game.mp3')
+        self.open = load_wav('Sounds/WelcomeBack.wav')
 
     def draw(self):
         self.image.draw(600, 400)
 
     def music(self):
+        self.open.play(1)
         self.bgm.repeat_play()
 
     def music_off(self):
@@ -30,6 +32,7 @@ class Player:
         self.mx, self.my = 0 ,0
         self.stage = 1
         self.life, self.credit, self.mode = 20, 300, 0
+        self.selected = 0
 
     def size(self):
         return self.mx, self.my, self.mx, self.my
@@ -43,7 +46,7 @@ class Player:
 class Tower:
     image = None
     def __init__(self):
-        self.x, self.y, self.r = 175, 525, 25
+        self.x, self.y, self.r = 225, 525, 25
         self.range, self.dmg, self.type = 150, 1, 1
         self.credit = 100
         self.target = None
@@ -56,6 +59,9 @@ class Tower:
 
     def draw(self):
         self.image.draw(self.x, self.y)
+
+    def draw_bb(self):
+        draw_rectangle(*self.size())
     pass
 
 
@@ -82,6 +88,9 @@ class Enemy:
     def draw(self):
         self.image.clip_draw(self.frame * 50, self.dir*50, 50, 50, self.x, self.y)
         font.draw(self.x - 30, self.y + 25, "[HP:%d]" % self.hp, (255, 0, 0))
+
+    def draw_bb(self):
+        draw_rectangle(*self.size())
     pass
 
 
@@ -91,12 +100,15 @@ def enter():
     global Towersltd, Tssltd, Speedsltd, Setsltd
     global wave
     global start
-
+    global click, alert_credit, alert_grid, alert_hp
     tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit = Tower_Laser(), Tower_Missile(), Tower_Radar()\
         , Tower_Upgrade(), Tower_Sell(), Speed_Run(), Speed_Stop(), Speed_Accelerate(), Option(), Quit()
 
     Towersltd, Tssltd, Speedsltd, Setsltd = Tower_Selected(), Tsmall_Selected(), Speed_Selected(), Set_Selected()
-
+    click = load_wav('Sounds/Click.wav')
+    alert_credit = load_wav('Sounds/NotENF.wav')
+    alert_grid = load_wav('Sounds/CantBuild.wav')
+    alert_hp = load_wav('Sounds/UnderAttack.wav')
 
     background, tower= BackGround(), Tower()
     player = Player()
@@ -151,7 +163,11 @@ def handle_events():
             else: Setsltd.x = 1400
 
         elif event.type == SDL_MOUSEBUTTONDOWN:
+            click.play()
             if collide(player, run): wave = True
+            elif collide(player, accel):
+                for enemy in enemies:
+                    enemy.speed *= 2
             elif collide(player, stop): wave = False
             elif collide(player, quit): game_framework.push_state(main_state)
 
@@ -159,10 +175,20 @@ def handle_events():
                 if player.credit >= tower.credit:
                     player.mode = 1
                     player.credit -= tower.credit
+                else:
+                    alert_credit.play(1)
             elif collide(player, tower2):
-                player.mode = 1
+                if player.credit >= tower.credit:
+                    player.mode = 1
+                    player.credit -= tower.credit
+                else:
+                    alert_credit.play(1)
             elif collide(player, tower3):
-                player.mode = 1
+                if player.credit >= tower.credit:
+                    player.mode = 1
+                    player.credit -= tower.credit
+                else:
+                    alert_credit.play(1)
     pass
 
 
@@ -196,13 +222,18 @@ def draw():
     option.draw()
     quit.draw()
 
+
     Towersltd.draw()
     Tssltd.draw()
     Setsltd.draw()
 
     for enemy in enemies:
         enemy.draw()
+        enemy.draw_bb()
     tower.draw()
+
+    tower.draw_bb()
+
     update_canvas()
     pass
 

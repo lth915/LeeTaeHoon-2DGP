@@ -54,10 +54,12 @@ def enter():
     global BG
     global Btn, Selected
     global mx, my
+    global click
 
     BG = BackGround()
     Btn = MenuBtn()
     Selected = BtnSelected()
+    click = load_wav('Sounds/Click.wav')
     mx, my = None, None
     BG.music()
     pass
@@ -89,6 +91,7 @@ def handle_events():
             else:
                 Selected.y = -100
         elif event.type == SDL_MOUSEBUTTONDOWN:
+            click.play()
             if Selected.y == 400:
                 BG.music_off()
                 game_framework.push_state(game_state)
