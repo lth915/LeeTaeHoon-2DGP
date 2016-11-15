@@ -6,6 +6,10 @@ import main_state
 
 from function_library import *
 from icons import *
+from map import *
+from player import *
+from tower import *
+from enemy import *
 
 name = "MainState"
 
@@ -27,94 +31,48 @@ class BackGround:
         self.bgm.stop()
     pass
 
-class Player:
-    def __init__(self):
-        self.mx, self.my = 0 ,0
-        self.stage = 1
-        self.life, self.credit, self.mode = 20, 300, 0
-        self.selected = 0
-
-    def size(self):
-        return self.mx, self.my, self.mx, self.my
-
-    def draw(self):
-        font.draw(1066, 799 - 38, "STAGE %d" % self.stage, (255, 255, 255))
-        font.draw(1030, 799 - 63, "CREDIT |  %d" % self.credit, (255, 255, 255))
-        font.draw(1030, 799 - 88, "LIFE        |  %d" % self.life, (255, 255, 255))
-    pass
-
-class Tower:
-    image = None
-    def __init__(self):
-        self.x, self.y, self.r = 225, 525, 25
-        self.range, self.dmg, self.type = 150, 1, 1
-        self.credit = 100
-        self.target = None
-        if self.image == None:
-            self.image = load_image('resource/Tower_Laser.png')
-
-    def size(self):
-        return (self.x - self.r - self.range), (self.y - self.r - self.range), \
-               (self.x + self.r + self.range), (self.y + self.r + self.range)
-
-    def draw(self):
-        self.image.draw(self.x, self.y)
-
-    def draw_bb(self):
-        draw_rectangle(*self.size())
-    pass
-
-
-class Enemy:
-    image = None
-
-    def __init__(self):
-        self.x, self.y, self.r = -50, 375, 25
-        self.hp, self.speed, self.type, self.reward = 10000, 0.2, 1, 10
-        self.frame, self.dir = 0, 2
-        if Enemy.image == None:
-            self.image = load_image('resource/Enemy Sprite.png')
-
-    def update(self):
-        if wave == True:
-            self.frame = (self.frame + 1) % 9
-            if (self.x <= 1000) & (self.y == 375):
-                self.dir = 2
-                self.x += self.speed
-
-    def size(self):
-        return (self.x - self.r), (self.y - self.r), (self.x + self.r), (self.y + self.r)
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 50, self.dir*50, 50, 50, self.x, self.y)
-        font.draw(self.x - 30, self.y + 25, "[HP:%d]" % self.hp, (255, 0, 0))
-
-    def draw_bb(self):
-        draw_rectangle(*self.size())
-    pass
-
 
 def enter():
-    global background, player, enemy, enemies, tower, font
+    global background, player, enemy, enemies, tower, towers, font
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
     global Towersltd, Tssltd, Speedsltd, Setsltd
-    global wave
     global start
     global click, alert_credit, alert_grid, alert_hp
+    global tile, tiles
+
     tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit = Tower_Laser(), Tower_Missile(), Tower_Radar()\
         , Tower_Upgrade(), Tower_Sell(), Speed_Run(), Speed_Stop(), Speed_Accelerate(), Option(), Quit()
-
     Towersltd, Tssltd, Speedsltd, Setsltd = Tower_Selected(), Tsmall_Selected(), Speed_Selected(), Set_Selected()
+
     click = load_wav('Sounds/Click.wav')
     alert_credit = load_wav('Sounds/NotENF.wav')
     alert_grid = load_wav('Sounds/CantBuild.wav')
     alert_hp = load_wav('Sounds/UnderAttack.wav')
-
-    background, tower= BackGround(), Tower()
-    player = Player()
-    enemy, enemies = Enemy(), [Enemy() for i in range(20)]
     font = load_font('Fonts/Myriad.otf')
-    wave = False
+
+    background, tower = BackGround(), Tower()
+    player = Player()
+
+    enemy, enemies = Enemy(), [Enemy() for i in range(20)]
+    tile, tiles = Tile(), [Tile() for i in range(20*16)]
+    towers = []
+
+    print(enemies)
+
+    i, j, a = 0, 0, 0
+
+    for tile in tiles:
+        if i > 19:
+            i = 0
+            j = j +1
+        if j > 15:
+            break
+        tiles[a].x = (i * 50) + 25
+        tiles[a].y = 799 - (j * 50 + 25)
+        print("%d:%d|%d:%d|%d" % (i, tiles[a].x, j, tiles[a].y, tiles[a].data))
+        i = i+1
+        a = a+1
+
     start = 50
 
     background.music()
@@ -131,7 +89,7 @@ def exit():
 
 
 def handle_events():
-    global wave, player, icon
+    global wave, player, icon, tile, tiles
 
     events = get_events()
     for event in events:
@@ -164,31 +122,60 @@ def handle_events():
 
         elif event.type == SDL_MOUSEBUTTONDOWN:
             click.play()
-            if collide(player, run): wave = True
-            elif collide(player, accel):
-                for enemy in enemies:
-                    enemy.speed *= 2
-            elif collide(player, stop): wave = False
-            elif collide(player, quit): game_framework.push_state(main_state)
+            for tile in tiles:
+                if collide(player, tile):
+                    print("%d %d" % (tile.x, tile.y))
 
-            if collide(player, tower1):
-                if player.credit >= tower.credit:
-                    player.mode = 1
-                    player.credit -= tower.credit
-                else:
-                    alert_credit.play(1)
-            elif collide(player, tower2):
-                if player.credit >= tower.credit:
-                    player.mode = 1
-                    player.credit -= tower.credit
-                else:
-                    alert_credit.play(1)
-            elif collide(player, tower3):
-                if player.credit >= tower.credit:
-                    player.mode = 1
-                    player.credit -= tower.credit
-                else:
-                    alert_credit.play(1)
+
+            if player.mode == 0:
+                if collide(player, run):
+                    for tower in towers:
+                        tower.wave = True
+                    for enemy in enemies:
+                        enemy.wave = True
+                elif collide(player, accel):
+                    for enemy in enemies:
+                        enemy.speed *= 2
+                elif collide(player, stop):
+                    for tower in towers:
+                        tower.wave = False
+                    for enemy in enemies:
+                        enemy.wave = False
+                # Speed Controller
+
+                if collide(player, tower1):
+                    if player.credit >= 100:
+                        player.mode = 1
+                        player.credit -= 100
+                    else:
+                        alert_credit.play(1)
+                elif collide(player, tower2):
+                    if player.credit >= 150:
+                        player.mode = 2
+                        player.credit -= 150
+                    else:
+                        alert_credit.play(1)
+                elif collide(player, tower3):
+                    if player.credit >= 120:
+                        player.mode = 3
+                        player.credit -= 120
+                    else:
+                        alert_credit.play(1)
+                # Tower Menu
+            elif player.mode == 1:
+                for tile in tiles:
+                    if collide(player, tile):
+                        towers.append(Tower())
+                        towers[-1].x = tile.x
+                        towers[-1].y = tile.y
+                        print("%d %d" % (tile.x, tile.y))
+                        print(towers)
+                player.mode = 0
+                pass
+            else:
+                pass
+
+            if collide(player, quit): game_framework.push_state(main_state)
     pass
 
 
@@ -196,11 +183,14 @@ def update():
     global wave
 
     for enemy in enemies:
-        if collide(tower, enemy):
-            enemy.hp -= tower.dmg
+        for tower in towers:
+            if collide(tower, enemy) & tower.wave == True:
+                enemy.hp -= tower.dmg
         if enemy.hp <= 0:
+            player.credit += enemy.reward
             enemies.remove(enemy)
         enemy.update()
+
     pass
 
 
@@ -230,9 +220,10 @@ def draw():
     for enemy in enemies:
         enemy.draw()
         enemy.draw_bb()
-    tower.draw()
 
-    tower.draw_bb()
+    for tower in towers:
+        tower.draw()
+        tower.draw_bb()
 
     update_canvas()
     pass

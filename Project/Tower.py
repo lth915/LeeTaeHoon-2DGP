@@ -1,15 +1,17 @@
 from pico2d import*
+import game_state
 
 
 class Tower:
     image = None
     def __init__(self):
-        self.x, self.y, self.r = 0, 0, 0
-        self.type, self.dmg, self.range = 0, 0, 0
-        self.credit = 0
+        self.x, self.y, self.r = 0, 0, 25
+        self.range, self.dmg, self.type = 150, 1, 1
+        self.credit = 100
         self.target = None
+        self.wave = False
         if self.image == None:
-            self.image = load_image('resource/Tower_Radar.png')
+            self.image = load_image('resource/Tower_Laser.png')
 
     def size(self):
         return (self.x - self.r - self.range), (self.y - self.r - self.range), \
@@ -17,10 +19,13 @@ class Tower:
 
     def draw(self):
         self.image.draw(self.x, self.y)
+
+    def draw_bb(self):
+        draw_rectangle(*self.size())
     pass
 
 
-class Tower_Laser(Tower):
+class LaserTower(Tower):
     image = None
     def __init__(self):
         self.x, self.y, self.r = 0, 0, 0
@@ -39,7 +44,7 @@ class Tower_Laser(Tower):
     pass
 
 
-class Tower_Missile(Tower):
+class MissileTower(Tower):
     image = None
     def __init__(self):
         self.x, self.y, self.r = 0, 0, 0
@@ -58,7 +63,7 @@ class Tower_Missile(Tower):
     pass
 
 
-class Tower_Radar(Tower):
+class RadarTower(Tower):
     image = None
     def __init__(self):
         self.x, self.y, self.r = 0, 0, 0
