@@ -32,6 +32,7 @@ class LaserTower(Tower):
         self.type, self.dmg, self.range = 1, 20, 125
         self.credit = 120
         self.target = None
+        self.wave = False
         if self.image == None:
             self.image = load_image('resource/Tower_Laser.png')
 
@@ -51,6 +52,7 @@ class MissileTower(Tower):
         self.type, self.dmg, self.range = 2, 30, 150
         self.credit = 0
         self.target = None
+        self.wave = False
         if self.image == None:
             self.image = load_image('resource/Tower_Missile.png')
 
@@ -70,6 +72,7 @@ class RadarTower(Tower):
         self.type, self.dmg, self.range = 3, 0, 150
         self.credit = 0
         self.target = None
+        self.wave = False
         if self.image == None:
             self.image = load_image('resource/Tower_Radar.png')
 
@@ -79,4 +82,8 @@ class RadarTower(Tower):
 
     def draw(self):
         self.image.draw(self.x, self.y)
+    pass
+
+
+def add_tower():
     pass

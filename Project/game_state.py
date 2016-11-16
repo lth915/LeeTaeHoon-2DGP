@@ -165,6 +165,9 @@ def handle_events():
             elif player.mode == 1:
                 for tile in tiles:
                     if collide(player, tile):
+                        if player.mode == 1: towers.append(LaserTower())
+                        elif player.mode == 2: towers.append(MissileTower())
+                        elif player.mode == 3: towers.append(RadarTower())
                         towers.append(Tower())
                         towers[-1].x = tile.x
                         towers[-1].y = tile.y
