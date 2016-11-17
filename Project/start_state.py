@@ -21,10 +21,10 @@ def exit():
     pass
 
 
-def update():
+def update(frame_time):
     global logo_time
 
-    if(logo_time > 2):
+    if(logo_time > 0.1):
         logo_time = 0
         game_framework.push_state(main_state)
     delay(0.01)
@@ -32,7 +32,7 @@ def update():
     pass
 
 
-def draw():
+def draw(frame_time):
     global image
     clear_canvas()
     image.draw(600, 400)
@@ -42,7 +42,7 @@ def draw():
 
 
 
-def handle_events():
+def handle_events(frame_time):
     events = get_events()
     pass
 

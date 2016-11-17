@@ -13,7 +13,7 @@ class Enemy:
         if Enemy.image == None:
             self.image = load_image('resource/Enemy Sprite.png')
 
-    def update(self):
+    def update(self, frame_time):
         if self.wave == True:
             self.frame = (self.frame + 1) % 9
             if (self.x <= 1000) & (self.y == 375):
@@ -23,7 +23,7 @@ class Enemy:
     def size(self):
         return (self.x - self.r), (self.y - self.r), (self.x + self.r), (self.y + self.r)
 
-    def draw(self):
+    def draw(self, frame_time):
         self.image.clip_draw(self.frame * 50, self.dir*50, 50, 50, self.x, self.y)
         self.font.draw(self.x - 30, self.y + 25, "[HP:%d]" % self.hp, (255, 0, 0))
 

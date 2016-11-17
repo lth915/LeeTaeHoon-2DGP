@@ -69,7 +69,7 @@ def exit():
     pass
 
 
-def handle_events():
+def handle_events(frame_time):
     global mx, my, Btn, Selected
 
     events = get_events()
@@ -107,7 +107,7 @@ def handle_events():
     pass
 
 
-def draw():
+def draw(frame_time):
     global BG, Btn, Selected
 
     clear_canvas()
@@ -121,7 +121,7 @@ def draw():
     pass
 
 
-def update():
+def update(frame_time):
     pass
 
 

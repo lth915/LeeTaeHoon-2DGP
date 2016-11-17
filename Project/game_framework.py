@@ -1,5 +1,6 @@
 from pico2d import*
 import game_state
+import time
 
 current_time = 0.0
 
@@ -31,13 +32,13 @@ class TestGameState:
         print("State [%s] Resumed" % self.name)
 
     def handle_events(self):
-        print("State [%s] handle_events" % self.name)
+        print("state [%s] handle_events" % self.name)
 
     def update(self):
-        print("State [%s] update" % self.name)
+        print("state [%s] update" % self.name)
 
     def draw(self):
-        print("State [%s] draw" % self.name)
+        print("state [%s] draw" % self.name)
 
 
 running = None
@@ -78,20 +79,21 @@ def quit():
 
 
 def run(start_state):
-    global running, stack
+    global running
+    global stack
     global frame_time
 
     running = True
     stack = [start_state]
     start_state.enter()
 
-    while (running):
+    while(running):
         frame_time = get_frame_time()
 
-        stack[-1].handle_events()
-        stack[-1].update()
-        stack[-1].draw()
-    # repeatedly delete the top of the stack
+        stack[-1].handle_events(frame_time)
+        stack[-1].update(frame_time)
+        stack[-1].draw(frame_time)
+    #repeatedly delete the top of the stack
     while (len(stack) > 0):
         stack[-1].exit()
         stack.pop()

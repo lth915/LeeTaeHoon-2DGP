@@ -50,7 +50,8 @@ def enter():
     alert_hp = load_wav('Sounds/UnderAttack.wav')
     font = load_font('Fonts/Myriad.otf')
 
-    background, tower = BackGround(), Tower()
+    background= BackGround()
+    #tower = Tower()
     player = Player()
 
     enemy, enemies = Enemy(), [Enemy() for i in range(20)]
@@ -88,7 +89,7 @@ def exit():
     pass
 
 
-def handle_events():
+def handle_events(frame_time):
     global wave, player, icon, tile, tiles
 
     events = get_events()
@@ -122,10 +123,6 @@ def handle_events():
 
         elif event.type == SDL_MOUSEBUTTONDOWN:
             click.play()
-            for tile in tiles:
-                if collide(player, tile):
-                    print("%d %d" % (tile.x, tile.y))
-
 
             if player.mode == 0:
                 if collide(player, run):
@@ -147,42 +144,44 @@ def handle_events():
                     if player.credit >= 100:
                         player.mode = 1
                         player.credit -= 100
+                        print("Laser Tower Selected!")
                     else:
                         alert_credit.play(1)
+                        print("error!")
                 elif collide(player, tower2):
                     if player.credit >= 150:
                         player.mode = 2
                         player.credit -= 150
+                        print("Missile Tower Selected!")
                     else:
                         alert_credit.play(1)
+                        print("error!")
                 elif collide(player, tower3):
                     if player.credit >= 120:
                         player.mode = 3
                         player.credit -= 120
+                        print("Radar Tower Selected!")
                     else:
                         alert_credit.play(1)
+                        print("error!")
                 # Tower Menu
-            elif player.mode == 1:
+
+            elif player.mode != 0:
                 for tile in tiles:
                     if collide(player, tile):
-                        if player.mode == 1: towers.append(LaserTower())
-                        elif player.mode == 2: towers.append(MissileTower())
-                        elif player.mode == 3: towers.append(RadarTower())
-                        towers.append(Tower())
-                        towers[-1].x = tile.x
-                        towers[-1].y = tile.y
-                        print("%d %d" % (tile.x, tile.y))
-                        print(towers)
+                        towers.append(Tower(tile.x, tile.y, player.mode))
+                        print("Selected Tile Located: %d | %d" % (tile.x, tile.y))
+                        print("Current Tower Located: %d | %d" % (towers[-1].x, towers[-1].y))
+                        print("==============================")
                 player.mode = 0
-                pass
-            else:
                 pass
 
             if collide(player, quit): game_framework.push_state(main_state)
+            if collide(player, option): pass
     pass
 
 
-def update():
+def update(frame_time):
     global wave
 
     for enemy in enemies:
@@ -192,12 +191,12 @@ def update():
         if enemy.hp <= 0:
             player.credit += enemy.reward
             enemies.remove(enemy)
-        enemy.update()
+        enemy.update(frame_time)
 
     pass
 
 
-def draw():
+def draw(frame_time):
     clear_canvas()
     background.draw()
     player.draw()
@@ -221,7 +220,7 @@ def draw():
     Setsltd.draw()
 
     for enemy in enemies:
-        enemy.draw()
+        enemy.draw(frame_time)
         enemy.draw_bb()
 
     for tower in towers:
