@@ -1,6 +1,6 @@
 from pico2d import*
 import game_state
-
+from function_library import *
 
 class Tower:
     image = None
@@ -29,6 +29,12 @@ class Tower:
 
     def draw(self):
         self.image.draw(self.x, self.y)
+
+    def update(self, enemy):
+        if collide(self, enemy):
+            self.target = enemy
+            targeted = True
+            pass
 
     def draw_bb(self):
         draw_rectangle(*self.size())
