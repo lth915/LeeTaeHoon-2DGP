@@ -1,12 +1,13 @@
 from pico2d import*
+import random
 
 
 class Enemy:
     image = None
 
-    def __init__(self):
-        self.x, self.y, self.r = -50, 375, 25
-        self.hp, self.speed, self.type, self.reward = 1000, 0.2, 1, 10
+    def __init__(self, kind = 1, location = -50):
+        self.x, self.y, self.r = location, 375, 25
+        self.hp, self.speed, self.type, self.reward = 1000, 0.2, kind, 10
         self.frame, self.dir = 0, 2
         self.font = load_font('Fonts/Myriad.otf')
         self.wave = False
@@ -30,3 +31,12 @@ class Enemy:
     def draw_bb(self):
         draw_rectangle(*self.size())
     pass
+
+
+def create_wave(enemies, stage):
+    for i in range( 15 + (stage*5) ):
+        if stage <= 3: t = 1
+        elif stage <= 5: t = random.randint(1, 2)
+        else: t = random.randint(1, 3)
+
+        enemies.append(Enemy(t, -50 - (i*75) ))

@@ -54,34 +54,19 @@ def enter():
     #tower = Tower()
     player = Player()
 
-    enemy, enemies = Enemy(), [Enemy() for i in range(20)]
-    tile, tiles = Tile(), [Tile() for i in range(20*16)]
+    enemy = Enemy()
+    enemies = []
+    tile = Tile()
+    tiles = []
     towers = []
 
+    create_wave(enemies, 1)
     print(enemies)
+    map_create(tiles)
 
-    i, j, a = 0, 0, 0
 
-    for tile in tiles:
-        if i > 19:
-            i = 0
-            j = j +1
-        if j > 15:
-            break
-        tiles[a].x = (i * 50) + 25
-        tiles[a].y = 799 - (j * 50 + 25)
-        print("%d:%d|%d:%d|%d" % (i, tiles[a].x, j, tiles[a].y, tiles[a].data))
-        i = i+1
-        a = a+1
-
-    start = 50
 
     background.music()
-
-    for i in range(20):
-        enemies[i].x -= start
-        start += 75
-
     pass
 
 
