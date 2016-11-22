@@ -169,6 +169,13 @@ def handle_events(frame_time):
 def update(frame_time):
     global wave
 
+    if enemies == []:
+        for tower in towers:
+            tower.wave = False
+        player.stage += 1
+        print("Stage %d Clear! Go to Stage %d" % (player.stage-1, player.stage))
+        create_wave(enemies, player.stage)
+
     for enemy in enemies:
         for tower in towers:
             if collide(tower, enemy) & tower.wave == True:
