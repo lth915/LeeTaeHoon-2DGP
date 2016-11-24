@@ -1,5 +1,5 @@
 from pico2d import *
-import game_state
+import main_state
 
 #mode 0 = none / 1 = build
 

@@ -1,6 +1,6 @@
 import game_framework
 from pico2d import *
-import main_state
+import menu_state
 
 name = "StartState"
 image = None
@@ -26,7 +26,7 @@ def update(frame_time):
 
     if(logo_time > 0.1):
         logo_time = 0
-        game_framework.push_state(main_state)
+        game_framework.push_state(menu_state)
     delay(0.01)
     logo_time += 0.01
     pass

@@ -3,7 +3,7 @@ import random
 
 
 class Enemy:
-    PIXEL_PER_METER = (10.0 / 0.3)
+    PIXEL_PER_METER = (10.0 / 1)
     RUN_SPEED_KMPH = 20.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
@@ -11,7 +11,7 @@ class Enemy:
 
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-    FRAMES_PER_ACTION = 8
+    FRAMES_PER_ACTION = 10
 
     image = None
 
@@ -49,7 +49,7 @@ class Enemy:
     pass
 
 
-def create_wave(enemies, stage):
+def create_enemies(enemies, stage):
     for i in range( 1 + (stage*1) ):
         if stage <= 3: t = 1
         elif stage <= 5: t = random.randint(1, 2)

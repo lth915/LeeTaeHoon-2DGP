@@ -1,5 +1,5 @@
 from pico2d import*
-import game_state
+import main_state
 import time
 
 current_time = 0.0

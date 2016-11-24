@@ -3,7 +3,7 @@ from pico2d import *
 import math
 import random
 
-import game_state
+import main_state
 
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.size()
