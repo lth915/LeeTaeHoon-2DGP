@@ -15,17 +15,25 @@ class Enemy:
 
     image = None
 
-    def __init__(self, kind = 1, location = -50):
-        self.x, self.y, self.r = location, 375, 25
-        self.hp, self.speed, self.type, self.reward = 300, 0.2, kind, 10
+
+    def __init__(self, type = 1, start_x = -50, start_y = 375):
+        self.x, self.y, self.r = start_x, start_y, 25
         self.frame, self.total_frames, self.dir = 0, 0, 2
         self.font = load_font('Fonts/Myriad.otf')
-        self.wave = False
-        if Enemy.image == None:
+        self.activation = False
+
+        if type == 1:
             self.image = load_image('resource/Enemy Sprite.png')
+            self.hp, self.speed, self.reward = 100, 1, 10
+        if type == 2:
+            self.image = load_image('resource/Enemy Sprite.png')
+            self.hp, self.reward = 100, 10
+        if type == 3:
+            self.image = load_image('resource/Enemy Sprite.png')
+            self.hp, self.reward = 100, 10
 
     def update(self, frame_time):
-        if self.wave == True:
+        if self.activation == True:
             distance = Enemy.RUN_SPEED_PPS * frame_time
             self.total_frames += Enemy.FRAMES_PER_ACTION * Enemy.ACTION_PER_TIME * frame_time
             self.frame = int(self.total_frames) % 8
@@ -37,7 +45,7 @@ class Enemy:
                 #self.dir = 2
                 #self.x += self.speed
 
-    def size(self):
+    def get_size(self):
         return (self.x - self.r), (self.y - self.r), (self.x + self.r), (self.y + self.r)
 
     def draw(self, frame_time):
@@ -45,14 +53,5 @@ class Enemy:
         self.font.draw(self.x - 30, self.y + 25, "[HP:%d]" % self.hp, (255, 0, 0))
 
     def draw_bb(self):
-        draw_rectangle(*self.size())
+        draw_rectangle(*self.get_size())
     pass
-
-
-def create_enemies(enemies, stage):
-    for i in range( 1 + (stage*1) ):
-        if stage <= 3: t = 1
-        elif stage <= 5: t = random.randint(1, 2)
-        else: t = random.randint(1, 3)
-
-        enemies.append(Enemy(t, -50 - (i*75) ))

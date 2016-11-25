@@ -5,13 +5,33 @@ import random
 import menu_state
 
 from utility import *
-from icons import *
+from ui import *
 from map import *
 from player import *
 from tower import *
 from enemy import *
 
 name = "MainState"
+
+
+def towers_attack(frame_time):
+    for enemy in enemies:
+        for tower in towers:
+            if collide(tower, enemy) & tower.activation == True:
+                enemy.hp -= tower.dmg
+        if enemy.hp <= 0:
+            player.credit += enemy.reward
+            enemies.remove(enemy)
+        enemy.update(frame_time)
+
+
+def check_stage():
+    if enemies == []:
+        for tower in towers:
+            tower.state = 'off'
+        player.stage += 1
+        print("Stage %d Clear! Go to Stage %d" % (player.stage-1, player.stage))
+        create_enemies(player.stage)
 
 
 def create_enemies(stage):
@@ -42,15 +62,19 @@ class BackGround:
 
 
 def enter():
-    global background, player, enemy, enemies, tower, towers, font
+    global background, player, enemies, towers, font
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
     global Towersltd, Tssltd, Speedsltd, Setsltd
     global start
     global click, alert_credit, alert_grid, alert_hp
     global tile, tiles
 
-    tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit = Tower_Laser(), Tower_Missile(), Tower_Radar()\
-        , Tower_Upgrade(), Tower_Sell(), Speed_Run(), Speed_Stop(), Speed_Accelerate(), Option(), Quit()
+    tower1, tower2, tower3  = Tower_Laser(), Tower_Missile(), Tower_Radar()
+    upgrade, sell           = Tower_Upgrade(), Tower_Sell()
+    run, stop, accel        = Speed_Run(), Speed_Stop(), Speed_Accelerate()
+    option, quit            = Option(), Quit()
+
+
     Towersltd, Tssltd, Speedsltd, Setsltd = Tower_Selected(), Tsmall_Selected(), Speed_Selected(), Set_Selected()
 
     click = load_wav('Sounds/Click.wav')
@@ -81,7 +105,7 @@ def exit():
 
 
 def handle_events(frame_time):
-    global wave, player, icon, tile, tiles
+    global player, tile, tiles
 
     events = get_events()
     for event in events:
@@ -118,17 +142,17 @@ def handle_events(frame_time):
             if player.mode == 0:
                 if collide(player, run):
                     for tower in towers:
-                        tower.wave = True
+                        tower.activation = True
                     for enemy in enemies:
-                        enemy.wave = True
+                        enemy.activation = True
                 elif collide(player, accel):
                     for enemy in enemies:
                         enemy.speed *= 2
                 elif collide(player, stop):
                     for tower in towers:
-                        tower.wave = False
+                        tower.activation = False
                     for enemy in enemies:
-                        enemy.wave = False
+                        enemy.activation = False
                 # Speed Controller
 
                 if collide(player, tower1):
@@ -173,23 +197,8 @@ def handle_events(frame_time):
 
 
 def update(frame_time):
-    global wave
-
-    if enemies == []:
-        for tower in towers:
-            tower.wave = False
-        player.stage += 1
-        print("Stage %d Clear! Go to Stage %d" % (player.stage-1, player.stage))
-        create_enemies(player.stage)
-
-    for enemy in enemies:
-        for tower in towers:
-            if collide(tower, enemy) & tower.wave == True:
-                enemy.hp -= tower.dmg
-        if enemy.hp <= 0:
-            player.credit += enemy.reward
-            enemies.remove(enemy)
-        enemy.update(frame_time)
+    check_stage()
+    towers_attack(frame_time)
 
     pass
 
@@ -219,7 +228,7 @@ def draw(frame_time):
 
     for enemy in enemies:
         enemy.draw(frame_time)
-        enemy.draw_bb()
+        #enemy.draw_bb()
 
     for tower in towers:
         tower.draw()

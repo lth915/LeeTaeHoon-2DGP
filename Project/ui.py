@@ -20,7 +20,7 @@ class Tower_Laser:
     def draw(self):
         self.image.draw(self.x ,self.y)
 
-    def size(self):
+    def get_size(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
     pass
 
@@ -40,7 +40,7 @@ class Tower_Missile:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-    def size(self):
+    def get_size(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
     pass
 
@@ -60,7 +60,7 @@ class Tower_Radar:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-    def size(self):
+    def get_size(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
     pass
 
@@ -80,7 +80,7 @@ class Tower_Upgrade:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-    def size(self):
+    def get_size(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
     pass
 
@@ -100,7 +100,7 @@ class Tower_Sell:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-    def size(self):
+    def get_size(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
     pass
 
@@ -152,7 +152,7 @@ class Speed_Run:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-    def size(self):
+    def get_size(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
 
 
@@ -171,7 +171,7 @@ class Speed_Accelerate:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-    def size(self):
+    def get_size(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
 
 
@@ -190,7 +190,7 @@ class Speed_Stop:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-    def size(self):
+    def get_size(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
     pass
 
@@ -228,7 +228,7 @@ class Option:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-    def size(self):
+    def get_size(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
     pass
 
@@ -248,7 +248,7 @@ class Quit:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-    def size(self):
+    def get_size(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
     pass
 

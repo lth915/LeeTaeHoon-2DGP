@@ -11,7 +11,7 @@ class Player:
         self.life, self.credit, self.mode = 20, 300, 0
         self.font = load_font('Fonts/Myriad.otf')
 
-    def size(self):
+    def get_size(self):
         return self.mx, self.my, self.mx, self.my
 
     def draw(self):

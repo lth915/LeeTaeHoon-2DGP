@@ -16,7 +16,7 @@ class Tile:
     def draw(self):
         pass
 
-    def size(self):
+    def get_size(self):
         return self.x - self.width, self.y - self.height, self.x + self.width, self.y + self.height
     pass
 
