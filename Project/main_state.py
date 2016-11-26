@@ -46,23 +46,23 @@ def create_enemies(stage):
 class BackGround:
     def __init__(self):
         self.image = load_image('resource/BackGround_Ingame2.png')
-        self.bgm = load_music('Sounds/Background_game.mp3')
-        self.open = load_wav('Sounds/WelcomeBack.wav')
+        self.bgm_main = load_music('Sounds/Background_game.mp3')
+        self.bgm_opening = load_wav('Sounds/WelcomeBack.wav')
 
     def draw(self):
         self.image.draw(600, 400)
 
     def music(self):
-        self.open.play(1)
-        self.bgm.repeat_play()
+        self.bgm_opening.play(1)
+        self.bgm_main.repeat_play()
 
     def music_off(self):
-        self.bgm.stop()
+        self.bgm_main.stop()
     pass
 
 
 def enter():
-    global background, player, enemies, towers, font
+    global background, player, enemies, towers, font, mouse
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
     global Towersltd, Tssltd, Speedsltd, Setsltd
     global start
@@ -113,7 +113,12 @@ def handle_events(frame_time):
             game_framework.quit()
 
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            game_framework.quit()
+            if not player.mode == 'General':
+                if player.mode == 'Laser Tower': player.credit += 100
+                if player.mode == 'Missile Tower': player.credit += 150
+                if player.mode == 'Radar Tower': player.credit += 120
+                player.mode = 'General'
+                print("Cancled!")
 
         elif event.type == SDL_MOUSEMOTION:
             player.mx, player.my = event.x, 799 - event.y
@@ -139,7 +144,7 @@ def handle_events(frame_time):
         elif event.type == SDL_MOUSEBUTTONDOWN:
             click.play()
 
-            if player.mode == 0:
+            if player.mode == 'General':
                 if collide(player, run):
                     for tower in towers:
                         tower.activation = True
@@ -157,7 +162,7 @@ def handle_events(frame_time):
 
                 if collide(player, tower1):
                     if player.credit >= 100:
-                        player.mode = 1
+                        player.mode = 'Laser Tower'
                         player.credit -= 100
                         print("Laser Tower Selected!")
                     else:
@@ -165,7 +170,7 @@ def handle_events(frame_time):
                         print("error!")
                 elif collide(player, tower2):
                     if player.credit >= 150:
-                        player.mode = 2
+                        player.mode = 'Missile Tower'
                         player.credit -= 150
                         print("Missile Tower Selected!")
                     else:
@@ -173,7 +178,7 @@ def handle_events(frame_time):
                         print("error!")
                 elif collide(player, tower3):
                     if player.credit >= 120:
-                        player.mode = 3
+                        player.mode = 'Radar Tower'
                         player.credit -= 120
                         print("Radar Tower Selected!")
                     else:
@@ -181,14 +186,19 @@ def handle_events(frame_time):
                         print("error!")
                 # Tower Menu
 
-            elif player.mode != 0:
+            elif not player.mode == 'General':
                 for tile in tiles:
                     if collide(player, tile):
-                        towers.append(Tower(tile.x, tile.y, player.mode))
-                        print("Selected Tile Located: %d | %d" % (tile.x, tile.y))
-                        print("Current Tower Located: %d | %d" % (towers[-1].x, towers[-1].y))
-                        print("==============================")
-                player.mode = 0
+                        if tile.buildable == True:
+                            towers.append(Tower(tile.x, tile.y, player.mode))
+                            player.mode = 'General'
+                            tile.buildable = False
+                            print("Selected Tile Located: %d | %d" % (tile.x, tile.y))
+                            print("Current Tower Located: %d | %d" % (towers[-1].x, towers[-1].y))
+                            print("==============================")
+                        else:
+                            alert_grid.play(1)
+                            print("error!")
                 pass
 
             if collide(player, quit): game_framework.push_state(menu_state)
@@ -199,7 +209,6 @@ def handle_events(frame_time):
 def update(frame_time):
     check_stage()
     towers_attack(frame_time)
-
     pass
 
 

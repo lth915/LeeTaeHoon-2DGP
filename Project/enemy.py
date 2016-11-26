@@ -39,12 +39,6 @@ class Enemy:
             self.frame = int(self.total_frames) % 8
             self.x += (self.dir * distance)
 
-        #if self.wave == True:
-            #self.frame = (self.frame + 1) % 9
-            #if (self.x <= 1000) & (self.y == 375):
-                #self.dir = 2
-                #self.x += self.speed
-
     def get_size(self):
         return (self.x - self.r), (self.y - self.r), (self.x + self.r), (self.y + self.r)
 

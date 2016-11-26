@@ -6,7 +6,7 @@ from tower import *
 class Tile:
     def __init__(self, x = 500, y = 500):
         self.x, self.y = x, y
-        self.data = 0
+        self.buildable = True
         self.width, self.height = 24, 24
         self.slot = None
 
@@ -26,7 +26,7 @@ def map_create(matrix):
     for j in range(16):
         for i in range(20):
             matrix.append(Tile((i * 50) + 25, 799 - (j * 50 + 25)))
-            print("%d:%d|%d:%d|%d" % (i, matrix[-1].x, j, matrix[-1].y, matrix[-1].data))
+            print("%d:%d|%d:%d" % (i, matrix[-1].x, j, matrix[-1].y))
 
             #matrix.x = (i * 50) + 25
             #matrix.y = 799 - (j * 50 + 25)

@@ -12,14 +12,15 @@ class Tower:
         self.x, self.y, self.r = x, y, 25
         self.target = None
         self.activation = False
+        self.type = type
 
-        if type == 1:
+        if type == 'Laser Tower':
             self.image = load_image('resource/Tower_Laser.png')
             self.credit, self.range, self.dmg = 100, 150, 1
-        elif type == 2:
+        elif type == 'Missile Tower':
             self.image = load_image('resource/Tower_Missile.png')
             self.credit, self.range, self.dmg = 150, 150, 1
-        elif type == 3:
+        elif type == 'Radar Tower':
             self.image = load_image('resource/Tower_Radar.png')
             self.credit, self.range, self.dmg = 120, 150, 1
 
@@ -30,11 +31,9 @@ class Tower:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-    def update(self, enemy):
+    def attack(self, enemy):
         if collide(self, enemy):
-            self.target = enemy
-            targeted = True
-            pass
+            enemy.hp -= self.dmg
 
     def draw_bb(self):
         draw_rectangle(*self.get_size())
