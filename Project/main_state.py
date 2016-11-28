@@ -24,7 +24,6 @@ def towers_attack(frame_time):
             enemies.remove(enemy)
         enemy.update(frame_time)
 
-
 def check_stage():
     if enemies == []:
         for tower in towers:
@@ -32,7 +31,6 @@ def check_stage():
         player.stage += 1
         print("Stage %d Clear! Go to Stage %d" % (player.stage-1, player.stage))
         create_enemies(player.stage)
-
 
 def create_enemies(stage):
     for i in range( 1 + (stage*1) ):
@@ -45,9 +43,9 @@ def create_enemies(stage):
 
 class BackGround:
     def __init__(self):
-        self.image = load_image('resource/BackGround_Ingame2.png')
+        self.image = load_image('resource/BackGround_Ingame.png')
         self.bgm_main = load_music('Sounds/Background_game.mp3')
-        self.bgm_opening = load_wav('Sounds/WelcomeBack.wav')
+        self.bgm_opening = load_wav('Sounds/Opening.wav')
 
     def draw(self):
         self.image.draw(600, 400)
@@ -61,20 +59,29 @@ class BackGround:
     pass
 
 
+class Mouse:
+    def __init__(self):
+        self.x, self.y = None, None
+        self.selection = None
+
+    def get_size(self):
+        return self.x, self.y, self.x, self.y
+
+
+
+
 def enter():
-    global background, player, enemies, towers, font, mouse
+    global background, player, font, mouse
+    global enemies, towers, tiles
+
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
     global Towersltd, Tssltd, Speedsltd, Setsltd
-    global start
     global click, alert_credit, alert_grid, alert_hp
-    global tile, tiles
 
-    tower1, tower2, tower3  = Tower_Laser(), Tower_Missile(), Tower_Radar()
-    upgrade, sell           = Tower_Upgrade(), Tower_Sell()
-    run, stop, accel        = Speed_Run(), Speed_Stop(), Speed_Accelerate()
-    option, quit            = Option(), Quit()
-
-
+    tower1, tower2, tower3 = Tower_Laser(), Tower_Missile(), Tower_Radar()
+    upgrade, sell = Tower_Upgrade(), Tower_Sell()
+    run, stop, accel = Speed_Run(), Speed_Stop(), Speed_Accelerate()
+    option, quit = Option(), Quit()
     Towersltd, Tssltd, Speedsltd, Setsltd = Tower_Selected(), Tsmall_Selected(), Speed_Selected(), Set_Selected()
 
     click = load_wav('Sounds/Click.wav')
@@ -85,6 +92,7 @@ def enter():
 
     background= BackGround()
     player = Player()
+    mouse = Mouse()
 
     enemies = []
     tiles = []
@@ -93,8 +101,6 @@ def enter():
     create_enemies(1)
     print(enemies)
     map_create(tiles)
-
-
 
     background.music()
     pass
@@ -113,72 +119,72 @@ def handle_events(frame_time):
             game_framework.quit()
 
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            if not player.mode == 'General':
-                if player.mode == 'Laser Tower': player.credit += 100
-                if player.mode == 'Missile Tower': player.credit += 150
-                if player.mode == 'Radar Tower': player.credit += 120
-                player.mode = 'General'
+            if not mouse.selection == None:
+                if mouse.selection == 'Laser Tower': player.credit += 100
+                if mouse.selection == 'Missile Tower': player.credit += 150
+                if mouse.selection == 'Radar Tower': player.credit += 120
+                mouse.selection = None
                 print("Cancled!")
 
         elif event.type == SDL_MOUSEMOTION:
-            player.mx, player.my = event.x, 799 - event.y
+            mouse.x, mouse.y = event.x, 799 - event.y
 
-            if collide(player, tower1): Towersltd.x = tower1.x
-            elif collide(player, tower2): Towersltd.x = tower2.x
-            elif collide(player, tower3): Towersltd.x = tower3.x
+            if collide(mouse, tower1): Towersltd.x = tower1.x
+            elif collide(mouse, tower2): Towersltd.x = tower2.x
+            elif collide(mouse, tower3): Towersltd.x = tower3.x
             else: Towersltd.x = 1400
 
-            if collide(player, upgrade): Tssltd.y = upgrade.y
-            elif collide(player, sell): Tssltd.y = sell.y
+            if collide(mouse, upgrade): Tssltd.y = upgrade.y
+            elif collide(mouse, sell): Tssltd.y = sell.y
             else: Tssltd.y = 900
 
-            if collide(player, run): Speedsltd.x = run.x
-            elif collide(player, accel): Speedsltd.x = accel.x
-            elif collide(player, stop): Speedsltd.x = stop.x
+            if collide(mouse, run): Speedsltd.x = run.x
+            elif collide(mouse, accel): Speedsltd.x = accel.x
+            elif collide(mouse, stop): Speedsltd.x = stop.x
             else: Speedsltd.x = 1400
 
-            if collide(player, option): Setsltd.x = option.x
-            elif collide(player, quit): Setsltd.x = quit.x
+            if collide(mouse, option): Setsltd.x = option.x
+            elif collide(mouse, quit): Setsltd.x = quit.x
             else: Setsltd.x = 1400
 
         elif event.type == SDL_MOUSEBUTTONDOWN:
             click.play()
 
-            if player.mode == 'General':
-                if collide(player, run):
+            if mouse.selection == None:
+                if collide(mouse, run):
                     for tower in towers:
                         tower.activation = True
                     for enemy in enemies:
                         enemy.activation = True
-                elif collide(player, accel):
+                elif collide(mouse, accel):
                     for enemy in enemies:
                         enemy.speed *= 2
-                elif collide(player, stop):
+                elif collide(mouse, stop):
                     for tower in towers:
                         tower.activation = False
                     for enemy in enemies:
                         enemy.activation = False
                 # Speed Controller
 
-                if collide(player, tower1):
+                if collide(mouse, tower1):
                     if player.credit >= 100:
-                        player.mode = 'Laser Tower'
+                        mouse.selection = 'Laser Tower'
                         player.credit -= 100
                         print("Laser Tower Selected!")
                     else:
                         alert_credit.play(1)
                         print("error!")
-                elif collide(player, tower2):
+                elif collide(mouse, tower2):
                     if player.credit >= 150:
-                        player.mode = 'Missile Tower'
+                        mouse.selection = 'Missile Tower'
                         player.credit -= 150
                         print("Missile Tower Selected!")
                     else:
                         alert_credit.play(1)
                         print("error!")
-                elif collide(player, tower3):
+                elif collide(mouse, tower3):
                     if player.credit >= 120:
-                        player.mode = 'Radar Tower'
+                        mouse.selection = 'Radar Tower'
                         player.credit -= 120
                         print("Radar Tower Selected!")
                     else:
@@ -186,12 +192,12 @@ def handle_events(frame_time):
                         print("error!")
                 # Tower Menu
 
-            elif not player.mode == 'General':
+            elif not mouse.selection == None:
                 for tile in tiles:
-                    if collide(player, tile):
+                    if collide(mouse, tile):
                         if tile.buildable == True:
-                            towers.append(Tower(tile.x, tile.y, player.mode))
-                            player.mode = 'General'
+                            towers.append(Tower(tile.x, tile.y, mouse.selection))
+                            mouse.selection = None
                             tile.buildable = False
                             print("Selected Tile Located: %d | %d" % (tile.x, tile.y))
                             print("Current Tower Located: %d | %d" % (towers[-1].x, towers[-1].y))
@@ -201,8 +207,8 @@ def handle_events(frame_time):
                             print("error!")
                 pass
 
-            if collide(player, quit): game_framework.push_state(menu_state)
-            if collide(player, option): pass
+            if collide(mouse, quit): game_framework.push_state(menu_state)
+            if collide(mouse, option): pass
     pass
 
 
@@ -237,7 +243,7 @@ def draw(frame_time):
 
     for enemy in enemies:
         enemy.draw(frame_time)
-        #enemy.draw_bb()
+        enemy.draw_bb()
 
     for tower in towers:
         tower.draw()
