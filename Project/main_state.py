@@ -29,16 +29,16 @@ def check_stage():
         for tower in towers:
             tower.state = 'off'
         player.stage += 1
-        print("Stage %d Clear! Go to Stage %d" % (player.stage-1, player.stage))
+        print("Stage %d Clear! Start Stage %d" % (player.stage-1, player.stage))
         create_enemies(player.stage)
 
 def create_enemies(stage):
     for i in range( 1 + (stage*1) ):
-        if stage <= 3: t = 1
-        elif stage <= 5: t = random.randint(1, 2)
-        else: t = random.randint(1, 3)
+        if stage <= 3: enemy_type = 1
+        elif stage <= 5: enemy_type = random.randint(1, 2)
+        else: enemy_type = random.randint(1, 3)
 
-        enemies.append(Enemy(t, -50 - (i*75) ))
+        enemies.append(Enemy(enemy_type, -50 - (i*75) ))
 
 
 class BackGround:
@@ -243,7 +243,7 @@ def draw(frame_time):
 
     for enemy in enemies:
         enemy.draw(frame_time)
-        enemy.draw_bb()
+        #enemy.draw_bb()
 
     for tower in towers:
         tower.draw()

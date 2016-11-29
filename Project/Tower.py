@@ -8,6 +8,16 @@ class Tower:
     credit = None
     dmg = None
 
+    PIXEL_PER_METER = (10.0 / 100)
+    RUN_SPEED_KMPH = 2000.0
+    RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+    RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+    RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+    TIME_PER_ACTION = 0.5
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAMES_PER_ACTION = 10
+
     def __init__(self, x, y, type):
         self.x, self.y, self.r = x, y, 25
         self.target = None
@@ -19,10 +29,10 @@ class Tower:
             self.credit, self.range, self.dmg = 100, 150, 1
         elif type == 'Missile Tower':
             self.image = load_image('resource/Tower_Missile.png')
-            self.credit, self.range, self.dmg = 150, 150, 1
+            self.credit, self.range, self.dmg = 150, 200, 1
         elif type == 'Radar Tower':
             self.image = load_image('resource/Tower_Radar.png')
-            self.credit, self.range, self.dmg = 120, 150, 1
+            self.credit, self.range, self.dmg = 120, 200, 1
 
     def get_size(self):
         return (self.x - self.r - self.range), (self.y - self.r - self.range), \
