@@ -17,7 +17,7 @@ name = "MainState"
 def towers_attack(frame_time):
     for enemy in enemies:
         for tower in towers:
-            if collide(tower, enemy) & tower.activation == True:
+            if collide(tower, enemy):
                 enemy.hp -= tower.dmg
         if enemy.hp <= 0:
             player.credit += enemy.reward
@@ -25,12 +25,14 @@ def towers_attack(frame_time):
         enemy.update(frame_time)
 
 def check_stage():
+    global activation
+
     if enemies == []:
-        for tower in towers:
-            tower.state = 'off'
+        activation = False
         player.stage += 1
         print("Stage %d Clear! Start Stage %d" % (player.stage-1, player.stage))
         create_enemies(player.stage)
+        return True
 
 def create_enemies(stage):
     for i in range( 1 + (stage*1) ):
@@ -73,26 +75,27 @@ class Mouse:
 def enter():
     global background, player, font, mouse
     global enemies, towers, tiles
+    global activation, timer
 
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
-    global Towersltd, Tssltd, Speedsltd, Setsltd
+    global Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay
     global click, alert_credit, alert_grid, alert_hp
 
     tower1, tower2, tower3 = Tower_Laser(), Tower_Missile(), Tower_Radar()
     upgrade, sell = Tower_Upgrade(), Tower_Sell()
     run, stop, accel = Speed_Run(), Speed_Stop(), Speed_Accelerate()
     option, quit = Option(), Quit()
-    Towersltd, Tssltd, Speedsltd, Setsltd = Tower_Selected(), Tsmall_Selected(), Speed_Selected(), Set_Selected()
+    Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay = Tower_Selected(), Tsmall_Selected(), Speed_Selected(), Set_Selected()
 
     click = load_wav('Sounds/Click.wav')
     alert_credit = load_wav('Sounds/NotENF.wav')
     alert_grid = load_wav('Sounds/CantBuild.wav')
     alert_hp = load_wav('Sounds/UnderAttack.wav')
     font = load_font('Fonts/Myriad.otf')
-
     background= BackGround()
     player = Player()
     mouse = Mouse()
+    activation = False
 
     enemies = []
     tiles = []
@@ -111,7 +114,7 @@ def exit():
 
 
 def handle_events(frame_time):
-    global player, tile, tiles
+    global player, tile, tiles, activation
 
     events = get_events()
     for event in events:
@@ -129,41 +132,35 @@ def handle_events(frame_time):
         elif event.type == SDL_MOUSEMOTION:
             mouse.x, mouse.y = event.x, 799 - event.y
 
-            if collide(mouse, tower1): Towersltd.x = tower1.x
-            elif collide(mouse, tower2): Towersltd.x = tower2.x
-            elif collide(mouse, tower3): Towersltd.x = tower3.x
-            else: Towersltd.x = 1400
+            if collide(mouse, tower1): Tower_overlay.x = tower1.x
+            elif collide(mouse, tower2): Tower_overlay.x = tower2.x
+            elif collide(mouse, tower3): Tower_overlay.x = tower3.x
+            else: Tower_overlay.x = 1400
 
-            if collide(mouse, upgrade): Tssltd.y = upgrade.y
-            elif collide(mouse, sell): Tssltd.y = sell.y
-            else: Tssltd.y = 900
+            if collide(mouse, upgrade): Ts_overlay.y = upgrade.y
+            elif collide(mouse, sell): Ts_overlay.y = sell.y
+            else: Ts_overlay.y = 900
 
-            if collide(mouse, run): Speedsltd.x = run.x
-            elif collide(mouse, accel): Speedsltd.x = accel.x
-            elif collide(mouse, stop): Speedsltd.x = stop.x
-            else: Speedsltd.x = 1400
+            if collide(mouse, run): Speed_overlay.x = run.x
+            elif collide(mouse, accel): Speed_overlay.x = accel.x
+            elif collide(mouse, stop): Speed_overlay.x = stop.x
+            else: Speed_overlay.x = 1400
 
-            if collide(mouse, option): Setsltd.x = option.x
-            elif collide(mouse, quit): Setsltd.x = quit.x
-            else: Setsltd.x = 1400
+            if collide(mouse, option): Set_overlay.x = option.x
+            elif collide(mouse, quit): Set_overlay.x = quit.x
+            else: Set_overlay.x = 1400
 
         elif event.type == SDL_MOUSEBUTTONDOWN:
             click.play()
 
             if mouse.selection == None:
                 if collide(mouse, run):
-                    for tower in towers:
-                        tower.activation = True
-                    for enemy in enemies:
-                        enemy.activation = True
+                    activation = True
                 elif collide(mouse, accel):
                     for enemy in enemies:
                         enemy.speed *= 2
                 elif collide(mouse, stop):
-                    for tower in towers:
-                        tower.activation = False
-                    for enemy in enemies:
-                        enemy.activation = False
+                    activation = False
                 # Speed Controller
 
                 if collide(mouse, tower1):
@@ -213,8 +210,9 @@ def handle_events(frame_time):
 
 
 def update(frame_time):
+    if activation == True:
+        towers_attack(frame_time)
     check_stage()
-    towers_attack(frame_time)
     pass
 
 
@@ -223,7 +221,7 @@ def draw(frame_time):
     background.draw()
     player.draw()
 
-    Speedsltd.draw()
+    Speed_overlay.draw()
 
     tower1.draw()
     tower2.draw()
@@ -237,9 +235,9 @@ def draw(frame_time):
     quit.draw()
 
 
-    Towersltd.draw()
-    Tssltd.draw()
-    Setsltd.draw()
+    Tower_overlay.draw()
+    Ts_overlay.draw()
+    Set_overlay.draw()
 
     for enemy in enemies:
         enemy.draw(frame_time)
@@ -259,9 +257,3 @@ def pause():
 
 def resume():
     pass
-
-
-
-
-
-

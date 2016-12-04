@@ -1,5 +1,6 @@
 from pico2d import*
 import main_state
+import threading
 from utility import *
 
 class Tower:
@@ -7,6 +8,7 @@ class Tower:
     range = None
     credit = None
     dmg = None
+    timer = None
 
     PIXEL_PER_METER = (10.0 / 100)
     RUN_SPEED_KMPH = 2000.0
@@ -21,7 +23,6 @@ class Tower:
     def __init__(self, x, y, type):
         self.x, self.y, self.r = x, y, 25
         self.target = None
-        self.activation = False
         self.type = type
 
         if type == 'Laser Tower':
@@ -44,6 +45,7 @@ class Tower:
     def attack(self, enemy):
         if collide(self, enemy):
             enemy.hp -= self.dmg
+
 
     def draw_bb(self):
         draw_rectangle(*self.get_size())

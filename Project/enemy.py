@@ -22,7 +22,6 @@ class Enemy:
         self.x, self.y, self.r = start_x, start_y, 25
         self.frame, self.total_frames, self.dir = 0, 0, 2
         self.font = load_font('Fonts/Myriad.otf')
-        self.activation = False
 
         if type == 1:
             self.image = load_image('resource/Enemy Sprite.png')
@@ -35,11 +34,10 @@ class Enemy:
             self.hp, self.speed, self.reward = 100, 1.2, 10
 
     def update(self, frame_time):
-        if self.activation == True:
-            distance = self.speed * Enemy.RUN_SPEED_PPS * frame_time
-            self.total_frames += Enemy.FRAMES_PER_ACTION * Enemy.ACTION_PER_TIME * frame_time
-            self.frame = int(self.total_frames) % 8
-            self.x += (self.dir * distance)
+        distance = self.speed * Enemy.RUN_SPEED_PPS * frame_time
+        self.total_frames += Enemy.FRAMES_PER_ACTION * Enemy.ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames) % 8
+        self.x += (self.dir * distance)
 
     def get_size(self):
         return (self.x - self.r), (self.y - self.r), (self.x + self.r), (self.y + self.r)
