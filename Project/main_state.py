@@ -19,6 +19,21 @@ def towers_attack(frame_time):
         for tower in towers:
             if collide(tower, enemy):
                 enemy.hp -= tower.dmg
+
+def towerss_attack():
+
+    for enemy in enemies:
+        for tower in towers:
+            if collide(tower, enemy):
+                enemy.hp -= tower.dmg
+
+    timer = threading.Timer(1, towerss_attack)
+    timer.start()
+
+
+
+def enemies_move(frame_time):
+    for enemy in enemies:
         if enemy.hp <= 0:
             player.credit += enemy.reward
             enemies.remove(enemy)
@@ -211,6 +226,7 @@ def handle_events(frame_time):
 
 def update(frame_time):
     if activation == True:
+        enemies_move(frame_time)
         towers_attack(frame_time)
     check_stage()
     pass
