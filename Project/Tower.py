@@ -43,6 +43,9 @@ class Tower:
         self.image.draw(self.x, self.y)
 
     def attack(self, enemy):
+        if int(self.total_frames) % 10 == 0:
+            print(int(self.total_frames))
+
         if collide(self, enemy):
             enemy.hp -= self.dmg
 

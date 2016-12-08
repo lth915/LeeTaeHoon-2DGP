@@ -3,7 +3,7 @@ import random
 
 
 class Enemy:
-    PIXEL_PER_METER = (10.0 / 100)
+    PIXEL_PER_METER = (20.0 / 100)
     RUN_SPEED_KMPH = 2000.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
@@ -37,7 +37,7 @@ class Enemy:
         distance = self.speed * Enemy.RUN_SPEED_PPS * frame_time
         self.total_frames += Enemy.FRAMES_PER_ACTION * Enemy.ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames) % 8
-        self.x += (self.dir * distance)
+        self.x += distance
 
     def get_size(self):
         return (self.x - self.r), (self.y - self.r), (self.x + self.r), (self.y + self.r)

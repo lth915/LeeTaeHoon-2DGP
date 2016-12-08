@@ -18,6 +18,7 @@ def towers_attack(frame_time):
     for enemy in enemies:
         for tower in towers:
             if collide(tower, enemy):
+
                 enemy.hp -= tower.dmg
 
 def towerss_attack():
