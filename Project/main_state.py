@@ -14,12 +14,14 @@ from enemy import *
 name = "MainState"
 
 
+
 def towers_attack(frame_time):
     for enemy in enemies:
         for tower in towers:
+            tower.update(frame_time)
             if collide(tower, enemy):
-
-                enemy.hp -= tower.dmg
+                if int(tower.total_frames) % 10 == 0:   # timer...
+                    enemy.hp -= tower.dmg
 
 def towerss_attack():
 
@@ -229,6 +231,7 @@ def update(frame_time):
     if activation == True:
         enemies_move(frame_time)
         towers_attack(frame_time)
+
     check_stage()
     pass
 

@@ -10,7 +10,7 @@ class Tower:
     dmg = None
     timer = None
 
-    PIXEL_PER_METER = (10.0 / 100)
+    PIXEL_PER_METER = (20.0 / 100)
     RUN_SPEED_KMPH = 2000.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
@@ -23,6 +23,7 @@ class Tower:
     def __init__(self, x, y, type):
         self.x, self.y, self.r = x, y, 25
         self.target = None
+        self.frame, self.total_frames, self.direction = 0, 0, 0
         self.type = type
 
         if type == 'Laser Tower':
@@ -39,8 +40,12 @@ class Tower:
         return (self.x - self.r - self.range), (self.y - self.r - self.range), \
                (self.x + self.r + self.range), (self.y + self.r + self.range)
 
+    def update(self, frame_time):
+        self.total_frames += Tower.FRAMES_PER_ACTION * Tower.ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames) % 8
+
     def draw(self):
-        self.image.draw(self.x, self.y)
+        self.image.clip_draw(0, self.direction * 50, 50, 50, self.x, self.y)
 
     def attack(self, enemy):
         if int(self.total_frames) % 10 == 0:

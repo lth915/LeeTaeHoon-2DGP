@@ -20,7 +20,7 @@ class Enemy:
 
     def __init__(self, type = 1, start_x = -50, start_y = 375):
         self.x, self.y, self.r = start_x, start_y, 25
-        self.frame, self.total_frames, self.dir = 0, 0, 2
+        self.frame, self.total_frames, self.direction = 0, 0, 2
         self.font = load_font('Fonts/Myriad.otf')
 
         if type == 1:
@@ -43,7 +43,7 @@ class Enemy:
         return (self.x - self.r), (self.y - self.r), (self.x + self.r), (self.y + self.r)
 
     def draw(self, frame_time):
-        self.image.clip_draw(self.frame * 50, self.dir*50, 50, 50, self.x, self.y)
+        self.image.clip_draw(self.frame * 50, self.direction * 50, 50, 50, self.x, self.y)
         self.font.draw(self.x - 30, self.y + 25, "[HP:%d]" % self.hp, (255, 0, 0))
 
     def draw_bb(self):
