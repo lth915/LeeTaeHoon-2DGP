@@ -10,14 +10,14 @@ class Tower:
     dmg = None
     timer = None
 
-    PIXEL_PER_METER = (20.0 / 100)
+    PIXEL_PER_METER = (20 / 100)
     RUN_SPEED_KMPH = 2000.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
     TIME_PER_ACTION = 0.5
-    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    ACTION_PER_TIME = 1 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 10
 
     def __init__(self, x, y, type):
@@ -47,12 +47,11 @@ class Tower:
     def draw(self):
         self.image.clip_draw(0, self.direction * 50, 50, 50, self.x, self.y)
 
-    def attack(self, enemy):
-        if int(self.total_frames) % 10 == 0:
-            print(int(self.total_frames))
+    def attack(self):
+        self.target.hp -= self.dmg
 
-        if collide(self, enemy):
-            enemy.hp -= self.dmg
+        if self.target.hp <= 0:
+            self.target = None
 
 
     def draw_bb(self):

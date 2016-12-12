@@ -19,9 +19,16 @@ def towers_attack(frame_time):
     for enemy in enemies:
         for tower in towers:
             tower.update(frame_time)
-            if collide(tower, enemy):
-                if int(tower.total_frames) % 10 == 0:   # timer...
-                    enemy.hp -= tower.dmg
+
+            #if int(tower.total_frames) % 10 == 0:
+            if tower.frame == 0:
+                if tower.target == None:
+                    if collide(tower, enemy):
+                        tower.target = enemy
+                        print("Lockon")
+                else:
+                    tower.attack()
+                    print("attack")
 
 def towerss_attack():
 
@@ -30,8 +37,7 @@ def towerss_attack():
             if collide(tower, enemy):
                 enemy.hp -= tower.dmg
 
-    timer = threading.Timer(1, towerss_attack)
-    timer.start()
+
 
 
 
@@ -93,7 +99,7 @@ class Mouse:
 def enter():
     global background, player, font, mouse
     global enemies, towers, tiles
-    global activation, timer
+    global activation
 
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
     global Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay
