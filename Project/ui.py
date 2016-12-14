@@ -265,3 +265,37 @@ class Set_Selected:
     def draw(self):
         self.image.draw(self.x ,self.y)
     pass
+
+
+####################################################################################################
+####################################################################################################
+#   Etc
+
+class Stage_Clear:
+    image = None
+
+    def __init__(self):
+        self.x, self.y = 500, 799 - 400
+        self.drawing = False
+        if self.image == None:
+            self.image = load_image('resource/Stage_Clear.png')
+
+    def draw(self):
+        if self.drawing == True:
+            self.image.draw(self.x ,self.y)
+    pass
+
+
+class Stage_Defeated:
+    image = None
+
+    def __init__(self):
+        self.x, self.y = 500, 799 - 400
+        self.drawing = False
+        if self.image == None:
+            self.image = load_image('resource/Stage_Defeated.png')
+
+    def draw(self):
+        if self.drawing == True:
+            self.image.draw(self.x ,self.y)
+    pass

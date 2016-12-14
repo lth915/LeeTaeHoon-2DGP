@@ -56,6 +56,7 @@ def check_stage():
         player.stage += 1
         print("Stage %d Clear! Start Stage %d" % (player.stage-1, player.stage))
         create_enemies(player.stage)
+        clear.drawing = True
         return True
 
 def create_enemies(stage):
@@ -102,11 +103,12 @@ def enter():
     global activation
 
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
-    global Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay
+    global Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay, clear, defeated
     global click, alert_credit, alert_grid, alert_hp
 
     tower1, tower2, tower3 = Tower_Laser(), Tower_Missile(), Tower_Radar()
     upgrade, sell = Tower_Upgrade(), Tower_Sell()
+    clear, defeated = Stage_Clear(), Stage_Defeated()
     run, stop, accel = Speed_Run(), Speed_Stop(), Speed_Accelerate()
     option, quit = Option(), Quit()
     Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay = Tower_Selected(), Tsmall_Selected(), Speed_Selected(), Set_Selected()
@@ -176,6 +178,11 @@ def handle_events(frame_time):
 
         elif event.type == SDL_MOUSEBUTTONDOWN:
             click.play()
+
+            if clear.drawing == True:
+                clear.drawing = False
+            if defeated.drawing == True:
+                defeated.drawing = False
 
             if mouse.selection == None:
                 if collide(mouse, run):
@@ -260,7 +267,6 @@ def draw(frame_time):
     option.draw()
     quit.draw()
 
-
     Tower_overlay.draw()
     Ts_overlay.draw()
     Set_overlay.draw()
@@ -272,6 +278,9 @@ def draw(frame_time):
     for tower in towers:
         tower.draw()
         tower.draw_bb()
+
+    clear.draw()
+    defeated.draw()
 
     update_canvas()
     pass
