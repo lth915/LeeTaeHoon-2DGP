@@ -14,13 +14,11 @@ from enemy import *
 name = "MainState"
 
 
-
 def towers_attack(frame_time):
     for enemy in enemies:
         for tower in towers:
             tower.update(frame_time)
 
-            #if int(tower.total_frames) % 10 == 0:
             if tower.frame == 0:
                 if tower.target == None:
                     if collide(tower, enemy):
@@ -57,6 +55,11 @@ def check_stage():
         print("Stage %d Clear! Start Stage %d" % (player.stage-1, player.stage))
         create_enemies(player.stage)
         clear.drawing = True
+        sound_victory.play()
+
+    if player.life == 0:
+        defeated.drawing = True
+        sound_defeated.play()
         return True
 
 def create_enemies(stage):
@@ -104,7 +107,7 @@ def enter():
 
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
     global Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay, clear, defeated
-    global click, alert_credit, alert_grid, alert_hp
+    global click, alert_credit, alert_grid, alert_hp, sound_victory, sound_defeated
 
     tower1, tower2, tower3 = Tower_Laser(), Tower_Missile(), Tower_Radar()
     upgrade, sell = Tower_Upgrade(), Tower_Sell()
@@ -117,6 +120,8 @@ def enter():
     alert_credit = load_wav('Sounds/NotENF.wav')
     alert_grid = load_wav('Sounds/CantBuild.wav')
     alert_hp = load_wav('Sounds/UnderAttack.wav')
+    sound_victory = load_wav('Sounds/Victory.wav')
+    sound_defeated = load_wav('Sounds/Defeated.wav')
     font = load_font('Fonts/Myriad.otf')
     background= BackGround()
     player = Player()
@@ -183,6 +188,7 @@ def handle_events(frame_time):
                 clear.drawing = False
             if defeated.drawing == True:
                 defeated.drawing = False
+                game_framework.push_state(menu_state)
 
             if mouse.selection == None:
                 if collide(mouse, run):
