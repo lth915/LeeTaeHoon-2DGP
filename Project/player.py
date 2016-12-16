@@ -1,9 +1,6 @@
 from pico2d import *
 import main_state
 
-#mode 0 = none / 1 = build
-
-
 class Player:
     def __init__(self):
         self.stage = 1

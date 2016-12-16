@@ -25,12 +25,13 @@ class Tower:
         self.target = None
         self.frame, self.total_frames, self.direction = 0, 0, 0
         self.type = type
+        self.timer = 0
 
         if type == 'Laser Tower':
             self.image = load_image('resource/Tower_Laser.png')
             self.credit, self.range, self.dmg = 100, 150, 1
         elif type == 'Missile Tower':
-            self.image = load_image('resource/Tower_Missile.png')
+            self.image = load_image('resource/Tower_MissileA.png')
             self.credit, self.range, self.dmg = 150, 200, 1
         elif type == 'Radar Tower':
             self.image = load_image('resource/Tower_Radar.png')
@@ -44,8 +45,18 @@ class Tower:
         self.total_frames += Tower.FRAMES_PER_ACTION * Tower.ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames) % 8
 
+        if not self.target == None:
+            if direction_check(self, self.target) == 'TOP': self.direction = 0
+            if direction_check(self, self.target) == 'TOP-RIGHT': self.direction = 1
+            if direction_check(self, self.target) == 'RIGHT': self.direction = 2
+            if direction_check(self, self.target) == 'RIGHT-BOTTOM': self.direction = 3
+            if direction_check(self, self.target) == 'BOTTOM': self.direction = 4
+            if direction_check(self, self.target) == 'BOTTOM-LEFT': self.direction = 5
+            if direction_check(self, self.target) == 'LEFT': self.direction = 6
+            if direction_check(self, self.target) == 'LEFT-TOP': self.direction = 7
+
     def draw(self):
-        self.image.clip_draw(0, self.direction * 50, 50, 50, self.x, self.y)
+        self.image.clip_draw(self.direction * 50, 0, 50, 50, self.x, self.y)
 
     def attack(self):
         self.target.hp -= self.dmg

@@ -108,6 +108,7 @@ def enter():
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
     global Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay, clear, defeated
     global click, alert_credit, alert_grid, alert_hp, sound_victory, sound_defeated
+    global sound
 
     tower1, tower2, tower3 = Tower_Laser(), Tower_Missile(), Tower_Radar()
     upgrade, sell = Tower_Upgrade(), Tower_Sell()
@@ -115,6 +116,7 @@ def enter():
     run, stop, accel = Speed_Run(), Speed_Stop(), Speed_Accelerate()
     option, quit = Option(), Quit()
     Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay = Tower_Selected(), Tsmall_Selected(), Speed_Selected(), Set_Selected()
+    sound = Sound()                                                                             # UI Sound Function....
 
     click = load_wav('Sounds/Click.wav')
     alert_credit = load_wav('Sounds/NotENF.wav')

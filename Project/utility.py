@@ -15,3 +15,17 @@ def collide(a, b):
     if bottom_a >= top_b: return False
 
     return True
+
+
+def direction_check(a, b):
+
+    if (a.y < b.y) & (a.x - (a.r * 5) < b.x) & (a.x + (a.r * 5) > b.x): return 'TOP'
+    if (a.x + (a.r * 5) < b.x) & (a.y + (a.r * 5) < b.y): return 'TOP-RIGHT'
+    if (a.y + (a.r * 5) > b.y) & (a.y - (a.r * 5) < b.y) & (a.x < b.x): return 'RIGHT'
+    if (a.y - (a.r * 5) > b.y) & (a.x + (a.r * 5) < b.x): return 'RIGHT-BOTTOM'
+    if (a.y > b.y) & (a.x - (a.r * 5) < b.x) & (a.x + (a.r * 5) > b.x): return 'BOTTOM'
+    if (a.x - (a.r * 5) > b.x) & (a.y - (a.r * 5) > b.y): return 'BOTTOM-LEFT'
+    if (a.y + (a.r * 5) > b.y) & (a.y - (a.r * 5) < b.y) & (a.x > b.x): return 'LEFT'
+    if (a.y + (a.r * 5) < b.y) & (a.x - (a.r * 5) > b.x): return 'LEFT-TOP'
+
+    return 'ERROR'

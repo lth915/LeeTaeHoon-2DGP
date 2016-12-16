@@ -299,3 +299,35 @@ class Stage_Defeated:
         if self.drawing == True:
             self.image.draw(self.x ,self.y)
     pass
+
+
+####################################################################################################
+####################################################################################################
+#   Sounds  global click, alert_credit, alert_grid, alert_hp, sound_victory, sound_defeated
+
+class Sound:
+    def __init__(self):
+        self.click = load_wav('Sounds/Click.wav')
+        self.build = load_wav('Sounds/CanBuild.wav')
+        self.build_alert = load_wav('Sounds/CantBuild.wav')
+        self.damaged = load_wav('Sounds/UnderAttack.wav')
+        self.victory = load_wav('Sounds/Victory.wav')
+        self.defeated = load_wav('Sounds/Defeated.wav')
+
+    def click(self):
+        self.click.play()
+
+    def build(self):
+        self.build.play()
+
+    def build_alert(self):
+        self.build_alert.play()
+
+    def damaged(self):
+        self.damaged.play()
+
+    def victory(self):
+        self.victory.play()
+
+    def defeated(self):
+        self.defeated.play()
