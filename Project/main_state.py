@@ -93,6 +93,7 @@ class Mouse:
     def __init__(self):
         self.x, self.y = None, None
         self.selection = None
+        self.selected = None
 
     def get_size(self):
         return self.x, self.y, self.x, self.y
@@ -147,7 +148,7 @@ def exit():
 
 
 def handle_events(frame_time):
-    global player, tile, tiles, activation
+    global player, tile, tiles, activation, towers
 
     events = get_events()
     for event in events:
@@ -200,7 +201,16 @@ def handle_events(frame_time):
                         enemy.speed *= 2
                 elif collide(mouse, stop):
                     activation = False
-                # Speed Controller
+                #else:  -->  [elif not mouse.selecton == 'None'] code block
+                    #for tower in towers:
+                        #if collide(mouse, tower):
+                            #mouse.selection = 'Tower Selected'
+                            #mouse.selected = tower
+                            #print("Tower Selected, Now Can Upgrade or Demolish")
+                        #else:
+                            #pass
+
+                # Speed Controller & Tower Select
 
                 if collide(mouse, tower1):
                     if player.credit >= 100:

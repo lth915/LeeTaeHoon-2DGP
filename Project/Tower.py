@@ -28,7 +28,7 @@ class Tower:
         self.timer = 0
 
         if type == 'Laser Tower':
-            self.image = load_image('resource/Tower_Laser.png')
+            self.image = load_image('resource/Tower_LaserA.png')
             self.credit, self.range, self.dmg = 100, 150, 1
         elif type == 'Missile Tower':
             self.image = load_image('resource/Tower_MissileA.png')

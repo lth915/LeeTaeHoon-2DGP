@@ -32,6 +32,8 @@ class Enemy:
         if type == 3:
             self.image = load_image('resource/Enemy Sprite.png')
             self.hp, self.speed, self.reward = 100, 1.2, 10
+        if type == 4:
+            pass
 
     def update(self, frame_time):
         distance = self.speed * Enemy.RUN_SPEED_PPS * frame_time
