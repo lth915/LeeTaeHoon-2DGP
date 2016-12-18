@@ -38,6 +38,9 @@ class Tower:
             self.credit, self.range, self.dmg = 120, 200, 1
 
     def get_size(self):
+        return (self.x - self.r), (self.y - self.r), (self.x + self.r), (self.y + self.r)
+
+    def get_rsize(self):
         return (self.x - self.r - self.range), (self.y - self.r - self.range), \
                (self.x + self.r + self.range), (self.y + self.r + self.range)
 
@@ -67,6 +70,7 @@ class Tower:
 
     def draw_bb(self):
         draw_rectangle(*self.get_size())
+        draw_rectangle(*self.get_rsize())
     pass
 
 

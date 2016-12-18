@@ -17,6 +17,18 @@ def collide(a, b):
     return True
 
 
+def collide_range(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_rsize()
+    left_b, bottom_b, right_b, top_b = b.get_size()
+
+    if left_a >= right_b: return False
+    if right_a <= left_b: return False
+    if top_a <= bottom_b: return False
+    if bottom_a >= top_b: return False
+
+    return True
+
+
 def direction_check(a, b):
 
     if (a.y < b.y) & (a.x - (a.r * 5) < b.x) & (a.x + (a.r * 5) > b.x): return 'TOP'

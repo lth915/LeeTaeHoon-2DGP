@@ -21,7 +21,7 @@ def towers_attack(frame_time):
 
             if tower.frame == 0:
                 if tower.target == None:
-                    if collide(tower, enemy):
+                    if collide_range(tower, enemy):
                         tower.target = enemy
                         print("Lockon")
                 else:
@@ -161,6 +161,7 @@ def handle_events(frame_time):
                 if mouse.selection == 'Missile Tower': player.credit += 150
                 if mouse.selection == 'Radar Tower': player.credit += 120
                 mouse.selection = None
+                mouse.selected = None
                 print("Cancled!")
 
         elif event.type == SDL_MOUSEMOTION:
@@ -201,14 +202,14 @@ def handle_events(frame_time):
                         enemy.speed *= 2
                 elif collide(mouse, stop):
                     activation = False
-                #else:  -->  [elif not mouse.selecton == 'None'] code block
-                    #for tower in towers:
-                        #if collide(mouse, tower):
-                            #mouse.selection = 'Tower Selected'
-                            #mouse.selected = tower
-                            #print("Tower Selected, Now Can Upgrade or Demolish")
-                        #else:
-                            #pass
+                else:
+                    for tower in towers:
+                        if collide(mouse, tower):
+                            mouse.selection = 'Tower Selected'
+                            mouse.selected = tower
+                            print("Tower Selected, Now Can Upgrade or Demolish")
+                        else:
+                            mouse.selected = None
 
                 # Speed Controller & Tower Select
 
