@@ -199,17 +199,17 @@ def handle_events(frame_time):
                     activation = True
                 elif collide(mouse, accel):
                     for enemy in enemies:
-                        enemy.speed *= 2
+                        if enemy.speed == 1: enemy.speed = 2
+                        elif enemy.speed == 2: enemy.speed = 3
+                        elif enemy.speed == 3: enemy.speed = 1
                 elif collide(mouse, stop):
                     activation = False
-                else:
+                elif mouse.x < 600:
                     for tower in towers:
                         if collide(mouse, tower):
-                            mouse.selection = 'Tower Selected'
-                            mouse.selected = tower
+                            mouse.selection = tower
+                            tower.selected = True
                             print("Tower Selected, Now Can Upgrade or Demolish")
-                        else:
-                            mouse.selected = None
 
                 # Speed Controller & Tower Select
 

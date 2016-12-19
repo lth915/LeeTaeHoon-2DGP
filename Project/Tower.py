@@ -25,7 +25,7 @@ class Tower:
         self.target = None
         self.frame, self.total_frames, self.direction = 0, 0, 0
         self.type = type
-        self.timer = 0
+        self.selected = False
 
         if type == 'Laser Tower':
             self.image = load_image('resource/Tower_LaserA.png')
@@ -60,6 +60,8 @@ class Tower:
 
     def draw(self):
         self.image.clip_draw(self.direction * 50, 0, 50, 50, self.x, self.y)
+        if self.selected == True:
+            draw_rectangle(*self.get_size())
 
     def attack(self):
         self.target.hp -= self.dmg
@@ -69,7 +71,6 @@ class Tower:
 
 
     def draw_bb(self):
-        draw_rectangle(*self.get_size())
         draw_rectangle(*self.get_rsize())
     pass
 
