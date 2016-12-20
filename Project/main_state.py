@@ -103,13 +103,14 @@ class Mouse:
 
 def enter():
     global background, player, font, mouse
-    global enemies, towers, tiles
+    global enemies, towers
     global activation
 
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
     global Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay, clear, defeated
     global click, alert_credit, alert_grid, alert_hp, sound_victory, sound_defeated
     global sound
+    global current_time
 
     tower1, tower2, tower3 = Tower_Laser(), Tower_Missile(), Tower_Radar()
     upgrade, sell = Tower_Upgrade(), Tower_Sell()
@@ -129,15 +130,14 @@ def enter():
     background= BackGround()
     player = Player()
     mouse = Mouse()
+    current_time = 0
     activation = False
 
     enemies = []
-    tiles = []
     towers = []
 
     create_enemies(1)
     print(enemies)
-    map_create(tiles)
 
     background.music()
     pass
@@ -148,7 +148,7 @@ def exit():
 
 
 def handle_events(frame_time):
-    global player, tile, tiles, activation, towers
+    global player, activation, towers
 
     events = get_events()
     for event in events:
@@ -161,7 +161,7 @@ def handle_events(frame_time):
                 if mouse.selection == 'Missile Tower': player.credit += 150
                 if mouse.selection == 'Radar Tower': player.credit += 120
                 mouse.selection = None
-                mouse.selected = None
+                #mouse.selected = None
                 print("Cancled!")
 
         elif event.type == SDL_MOUSEMOTION:
@@ -204,10 +204,11 @@ def handle_events(frame_time):
                         elif enemy.speed == 3: enemy.speed = 1
                 elif collide(mouse, stop):
                     activation = False
-                elif mouse.x < 600:
+                elif mouse.x < 1000:
                     for tower in towers:
                         if collide(mouse, tower):
-                            mouse.selection = tower
+                            mouse.selection = 'Tower Selected'
+                            mouse.selected = tower
                             tower.selected = True
                             print("Tower Selected, Now Can Upgrade or Demolish")
 
@@ -239,20 +240,38 @@ def handle_events(frame_time):
                         print("error!")
                 # Tower Menu
 
-            elif not mouse.selection == None:
-                for tile in tiles:
-                    if collide(mouse, tile):
-                        if tile.buildable == True:
-                            towers.append(Tower(tile.x, tile.y, mouse.selection))
-                            mouse.selection = None
-                            tile.buildable = False
-                            print("Selected Tile Located: %d | %d" % (tile.x, tile.y))
-                            print("Current Tower Located: %d | %d" % (towers[-1].x, towers[-1].y))
-                            print("==============================")
-                        else:
-                            alert_grid.play(1)
-                            print("error!")
-                pass
+            elif mouse.selection == 'Tower Selected':
+                cancel = True
+
+                for tower in towers:
+                    tower.selected = False
+
+                    if collide(mouse, tower):
+                        mouse.selected = tower
+                        tower.selected = True
+                        cancel = False
+                        print("Tower Selected, Now Can Upgrade or Demolish")
+
+                if cancel == True:
+                    mouse.selection = None
+                    mouse.selected = None
+                    print("Tower Canceled")
+
+            else:
+                build = True
+
+                for tower in towers:
+                    if collide(mouse, tower): build = False
+
+                if build == True:
+                    towers.append(Tower((int(mouse.x / 50) * 50) + 25, (int(mouse.y / 50) * 50) + 25, mouse.selection))
+                    mouse.selection = None
+                    print("Current Tower Located: %d | %d" % (towers[-1].x, towers[-1].y))
+                    print("==============================")
+                else:
+                    alert_grid.play(1)
+                    print("error!")
+
 
             if collide(mouse, quit): game_framework.push_state(menu_state)
             if collide(mouse, option): pass
@@ -260,6 +279,11 @@ def handle_events(frame_time):
 
 
 def update(frame_time):
+    global current_time
+
+    #current_time += frame_time
+    # print(current_time)
+
     if activation == True:
         enemies_move(frame_time)
         towers_attack(frame_time)

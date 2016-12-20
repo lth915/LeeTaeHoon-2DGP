@@ -26,6 +26,7 @@ class Tower:
         self.frame, self.total_frames, self.direction = 0, 0, 0
         self.type = type
         self.selected = False
+        self.image = load_image('resource/Tower_Laser.png')
 
         if type == 'Laser Tower':
             self.image = load_image('resource/Tower_LaserA.png')
@@ -40,7 +41,7 @@ class Tower:
     def get_size(self):
         return (self.x - self.r), (self.y - self.r), (self.x + self.r), (self.y + self.r)
 
-    def get_rsize(self):
+    def get_range(self):
         return (self.x - self.r - self.range), (self.y - self.r - self.range), \
                (self.x + self.r + self.range), (self.y + self.r + self.range)
 
@@ -71,7 +72,7 @@ class Tower:
 
 
     def draw_bb(self):
-        draw_rectangle(*self.get_rsize())
+        draw_rectangle(*self.get_range())
     pass
 
 
