@@ -30,10 +30,10 @@ class Tower:
 
         if type == 'Laser Tower':
             self.image = load_image('resource/Tower_LaserA.png')
-            self.credit, self.range, self.dmg = 100, 150, 1
+            self.credit, self.range, self.dmg = 100, 150, 10
         elif type == 'Missile Tower':
             self.image = load_image('resource/Tower_MissileA.png')
-            self.credit, self.range, self.dmg = 150, 200, 1
+            self.credit, self.range, self.dmg = 150, 200, 20
         elif type == 'Radar Tower':
             self.image = load_image('resource/Tower_Radar.png')
             self.credit, self.range, self.dmg = 120, 200, 1

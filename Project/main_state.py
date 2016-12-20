@@ -14,30 +14,35 @@ from enemy import *
 name = "MainState"
 
 
+def count_timer(frame_time):
+    global timer, count
+
+    if timer >= 1000:
+        timer = 0
+
+    timer += 1
+    pass
+
 def towers_attack(frame_time):
+    switch = 0
+
+    if timer % 100 == 0:
+        switch = 1
+
     for enemy in enemies:
         for tower in towers:
             tower.update(frame_time)
 
-            if tower.frame == 0:
+            if switch == 1:
                 if tower.target == None:
                     if collide_range(tower, enemy):
                         tower.target = enemy
                         print("Lockon")
                 else:
-                    tower.attack()
-                    print("attack")
-
-def towerss_attack():
-
-    for enemy in enemies:
-        for tower in towers:
-            if collide(tower, enemy):
-                enemy.hp -= tower.dmg
-
-
-
-
+                    if collide_range(tower, enemy):
+                        tower.attack()
+                        switch = 0
+    pass
 
 def enemies_move(frame_time):
     for enemy in enemies:
@@ -45,6 +50,7 @@ def enemies_move(frame_time):
             player.credit += enemy.reward
             enemies.remove(enemy)
         enemy.update(frame_time)
+    pass
 
 def check_stage():
     global activation
@@ -61,6 +67,7 @@ def check_stage():
         defeated.drawing = True
         sound_defeated.play()
         return True
+    pass
 
 def create_enemies(stage):
     for i in range( 1 + (stage*1) ):
@@ -69,6 +76,7 @@ def create_enemies(stage):
         else: enemy_type = random.randint(1, 3)
 
         enemies.append(Enemy(enemy_type, -50 - (i*75) ))
+    pass # ============================================================================================================
 
 
 class BackGround:
@@ -97,14 +105,14 @@ class Mouse:
 
     def get_size(self):
         return self.x, self.y, self.x, self.y
-
-
+    pass # ============================================================================================================
 
 
 def enter():
     global background, player, font, mouse
     global enemies, towers
     global activation
+    global timer
 
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
     global Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay, clear, defeated
@@ -131,6 +139,7 @@ def enter():
     player = Player()
     mouse = Mouse()
     current_time = 0
+    timer = 0
     activation = False
 
     enemies = []
@@ -140,11 +149,11 @@ def enter():
     print(enemies)
 
     background.music()
-    pass
+    pass # ============================================================================================================
 
 
 def exit():
-    pass
+    pass # ============================================================================================================
 
 
 def handle_events(frame_time):
@@ -275,21 +284,18 @@ def handle_events(frame_time):
 
             if collide(mouse, quit): game_framework.push_state(menu_state)
             if collide(mouse, option): pass
-    pass
+    pass # ============================================================================================================
 
 
 def update(frame_time):
-    global current_time
-
-    #current_time += frame_time
-    # print(current_time)
-
     if activation == True:
+        count_timer(frame_time)
+
         enemies_move(frame_time)
         towers_attack(frame_time)
 
     check_stage()
-    pass
+    pass # ============================================================================================================
 
 
 def draw(frame_time):
@@ -326,12 +332,12 @@ def draw(frame_time):
     defeated.draw()
 
     update_canvas()
-    pass
+    pass # ============================================================================================================
 
 
 def pause():
-    pass
+    pass # ============================================================================================================
 
 
 def resume():
-    pass
+    pass # ============================================================================================================
