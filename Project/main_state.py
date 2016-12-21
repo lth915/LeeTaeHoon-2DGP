@@ -24,9 +24,10 @@ def count_timer(frame_time):
     pass
 
 def towers_attack(frame_time):
+    global attack_cycle
     switch = 0
 
-    if timer % 100 == 0:
+    if timer % attack_cycle == 0:
         switch = 1
 
     for enemy in enemies:
@@ -41,7 +42,7 @@ def towers_attack(frame_time):
                 else:
                     if collide_range(tower, enemy):
                         tower.attack()
-                        switch = 0
+        switch = 0
     pass
 
 def enemies_move(frame_time):
@@ -113,12 +114,12 @@ def enter():
     global enemies, towers
     global activation
     global timer
+    global attack_cycle
 
     global tower1, tower2, tower3, upgrade, sell, run, stop, accel, option, quit
     global Tower_overlay, Ts_overlay, Speed_overlay, Set_overlay, clear, defeated
     global click, alert_credit, alert_grid, alert_hp, sound_victory, sound_defeated
     global sound
-    global current_time
 
     tower1, tower2, tower3 = Tower_Laser(), Tower_Missile(), Tower_Radar()
     upgrade, sell = Tower_Upgrade(), Tower_Sell()
@@ -138,8 +139,9 @@ def enter():
     background= BackGround()
     player = Player()
     mouse = Mouse()
-    current_time = 0
+
     timer = 0
+    attack_cycle = 100
     activation = False
 
     enemies = []
@@ -157,7 +159,7 @@ def exit():
 
 
 def handle_events(frame_time):
-    global player, activation, towers
+    global player, activation, towers, attack_cycle
 
     events = get_events()
     for event in events:
@@ -170,7 +172,7 @@ def handle_events(frame_time):
                 if mouse.selection == 'Missile Tower': player.credit += 150
                 if mouse.selection == 'Radar Tower': player.credit += 120
                 mouse.selection = None
-                #mouse.selected = None
+                mouse.selected = None
                 print("Cancled!")
 
         elif event.type == SDL_MOUSEMOTION:
@@ -208,9 +210,15 @@ def handle_events(frame_time):
                     activation = True
                 elif collide(mouse, accel):
                     for enemy in enemies:
-                        if enemy.speed == 1: enemy.speed = 2
-                        elif enemy.speed == 2: enemy.speed = 3
-                        elif enemy.speed == 3: enemy.speed = 1
+                        if enemy.speed == 1:
+                            enemy.speed = 2
+                            attack_cycle = 50
+                        elif enemy.speed == 2:
+                            enemy.speed = 3
+                            attack_cycle = 33
+                        elif enemy.speed == 3:
+                            enemy.speed = 1
+                            attack_cycle = 100
                 elif collide(mouse, stop):
                     activation = False
                 elif mouse.x < 1000:
@@ -250,21 +258,36 @@ def handle_events(frame_time):
                 # Tower Menu
 
             elif mouse.selection == 'Tower Selected':
-                cancel = True
-
-                for tower in towers:
-                    tower.selected = False
-
-                    if collide(mouse, tower):
-                        mouse.selected = tower
-                        tower.selected = True
-                        cancel = False
-                        print("Tower Selected, Now Can Upgrade or Demolish")
-
-                if cancel == True:
-                    mouse.selection = None
+                if collide(mouse, upgrade):
+                    if player.credit >= int(mouse.selected.credit/2):
+                        player.credit -= int(mouse.selected.credit/2)
+                        mouse.selected.credit += int(mouse.selected.credit/2)
+                        mouse.selected.range += 25
+                        mouse.selected.dmg += int(mouse.selected.dmg*0.3)
+                    else:
+                        alert_credit.play(1)
+                        print("error!")
+                elif collide(mouse, sell):
+                    player.credit += int(mouse.selected.credit/2)
+                    del(mouse.selected.credit)
                     mouse.selected = None
-                    print("Tower Canceled")
+                    mouse.selection = None
+                else:
+                    cancel = True
+
+                    for tower in towers:
+                        tower.selected = False
+
+                        if collide(mouse, tower):
+                            mouse.selected = tower
+                            tower.selected = True
+                            cancel = False
+                            print("Tower Selected, Now Can Upgrade or Demolish")
+
+                    if cancel == True:
+                        mouse.selection = None
+                        mouse.selected = None
+                        print("Tower Canceled")
 
             else:
                 build = True
@@ -322,14 +345,17 @@ def draw(frame_time):
 
     for enemy in enemies:
         enemy.draw(frame_time)
-        #enemy.draw_bb()
 
     for tower in towers:
         tower.draw()
-        tower.draw_bb()
 
     clear.draw()
     defeated.draw()
+
+    if not mouse.selected == None:
+        font.draw(1035, 799 - 170, "%s" % mouse.selected.type, (255, 255, 255))
+        font.draw(1035, 799 - 210, "DMG   |  %d" % int(mouse.selected.dmg), (255, 255, 255))
+        font.draw(1035, 799 - 230, "RANG |  %d" % int(mouse.selected.range), (255, 255, 255))
 
     update_canvas()
     pass # ============================================================================================================

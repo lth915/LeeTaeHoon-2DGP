@@ -27,11 +27,11 @@ class Enemy:
             self.image = load_image('resource/Enemy Sprite.png')
             self.hp, self.speed, self.reward = 100, 1, 10
         if type == 2:
-            self.image = load_image('resource/Enemy Sprite.png')
-            self.hp, self.speed, self.reward = 150, 1.5, 10
+            self.image = load_image('resource/Enemy_Flight.png')
+            self.hp, self.speed, self.reward = 150, 1, 20
         if type == 3:
             self.image = load_image('resource/Enemy Sprite.png')
-            self.hp, self.speed, self.reward = 100, 1.2, 10
+            self.hp, self.speed, self.reward = 100, 1, 15
         if type == 4:
             pass
 
@@ -46,7 +46,7 @@ class Enemy:
 
     def draw(self, frame_time):
         self.image.clip_draw(self.frame * 50, self.direction * 50, 50, 50, self.x, self.y)
-        self.font.draw(self.x - 30, self.y + 25, "[HP:%d]" % self.hp, (255, 0, 0))
+        #self.font.draw(self.x - 30, self.y + 25, "[HP:%d]" % self.hp, (255, 0, 0))
 
     def draw_bb(self):
         draw_rectangle(*self.get_size())
