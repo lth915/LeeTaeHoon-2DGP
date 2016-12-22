@@ -90,7 +90,7 @@ class Tower_Sell:
 
     def __init__(self):
         self.x, self.y = 1152, 799 - 236
-        self.width, self.height = 0, 0
+        self.width, self.height = 17, 10
         if self.image == None:
             self.image = load_image('resource/Btn_Game_Tsell.png')
 

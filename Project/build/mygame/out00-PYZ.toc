@@ -12,10 +12,6 @@
    'C:\\Users\\Lee '
    'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\datetime.py',
    'PYMODULE'),
-  ('stringprep',
-   'C:\\Users\\Lee '
-   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\stringprep.py',
-   'PYMODULE'),
   ('_compat_pickle',
    'C:\\Users\\Lee '
    'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\_compat_pickle.py',
@@ -24,13 +20,13 @@
    'C:\\Users\\Lee '
    'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\pickle.py',
    'PYMODULE'),
+  ('stringprep',
+   'C:\\Users\\Lee '
+   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\stringprep.py',
+   'PYMODULE'),
   ('__future__',
    'C:\\Users\\Lee '
    'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\__future__.py',
-   'PYMODULE'),
-  ('argparse',
-   'C:\\Users\\Lee '
-   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\argparse.py',
    'PYMODULE'),
   ('difflib',
    'C:\\Users\\Lee '
@@ -215,10 +211,6 @@
   ('pydoc_data.topics',
    'C:\\Users\\Lee '
    'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\pydoc_data\\topics.py',
-   'PYMODULE'),
-  ('textwrap',
-   'C:\\Users\\Lee '
-   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\textwrap.py',
    'PYMODULE'),
   ('html.entities',
    'C:\\Users\\Lee '
@@ -412,26 +404,6 @@
    'C:\\Users\\Lee '
    'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\pydoc.py',
    'PYMODULE'),
-  ('copy',
-   'C:\\Users\\Lee '
-   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\copy.py',
-   'PYMODULE'),
-  ('struct',
-   'C:\\Users\\Lee '
-   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\struct.py',
-   'PYMODULE'),
-  ('token',
-   'C:\\Users\\Lee '
-   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\token.py',
-   'PYMODULE'),
-  ('tokenize',
-   'C:\\Users\\Lee '
-   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\tokenize.py',
-   'PYMODULE'),
-  ('gettext',
-   'C:\\Users\\Lee '
-   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\gettext.py',
-   'PYMODULE'),
   ('getopt',
    'C:\\Users\\Lee '
    'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\getopt.py',
@@ -548,17 +520,46 @@
    'C:\\Users\\Lee '
    'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\subprocess.py',
    'PYMODULE'),
+  ('token',
+   'C:\\Users\\Lee '
+   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\token.py',
+   'PYMODULE'),
+  ('copy',
+   'C:\\Users\\Lee '
+   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\copy.py',
+   'PYMODULE'),
+  ('textwrap',
+   'C:\\Users\\Lee '
+   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\textwrap.py',
+   'PYMODULE'),
+  ('struct',
+   'C:\\Users\\Lee '
+   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\struct.py',
+   'PYMODULE'),
+  ('gettext',
+   'C:\\Users\\Lee '
+   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\gettext.py',
+   'PYMODULE'),
+  ('argparse',
+   'C:\\Users\\Lee '
+   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\argparse.py',
+   'PYMODULE'),
+  ('tokenize',
+   'C:\\Users\\Lee '
+   'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\tokenize.py',
+   'PYMODULE'),
   ('start_state', 'D:\\Project\\start_state.py', 'PYMODULE'),
   ('menu_state', 'D:\\Project\\menu_state.py', 'PYMODULE'),
   ('option_state', 'D:\\Project\\option_state.py', 'PYMODULE'),
   ('help_state', 'D:\\Project\\help_state.py', 'PYMODULE'),
+  ('ui_help', 'D:\\Project\\ui_help.py', 'PYMODULE'),
+  ('utility', 'D:\\Project\\utility.py', 'PYMODULE'),
   ('main_state', 'D:\\Project\\main_state.py', 'PYMODULE'),
   ('enemy', 'D:\\Project\\enemy.py', 'PYMODULE'),
   ('tower', 'D:\\Project\\tower.py', 'PYMODULE'),
   ('player', 'D:\\Project\\player.py', 'PYMODULE'),
   ('map', 'D:\\Project\\map.py', 'PYMODULE'),
   ('ui', 'D:\\Project\\ui.py', 'PYMODULE'),
-  ('utility', 'D:\\Project\\utility.py', 'PYMODULE'),
   ('pico2d',
    'C:\\Users\\Lee '
    'TaeHoon\\AppData\\Local\\Programs\\Python\\Python35\\lib\\site-packages\\pico2d.py',
